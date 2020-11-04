@@ -12,6 +12,7 @@
 #include <hive/chain/util/manabar.hpp>
 
 #include <hive/chain/util/delayed_voting_processor.hpp>
+#include <hive/chain/util/recurrent_transfer_processor.hpp>
 #include <hive/chain/util/tiny_asset.hpp>
 
 #include <numeric>
@@ -194,6 +195,8 @@ namespace hive { namespace chain {
       public_key_type   memo_key;   //public_key_type - 33 bytes
 
       fc::array<share_type, HIVE_MAX_PROXY_RECURSION_DEPTH> proxied_vsf_votes;// = std::vector<share_type>( HIVE_MAX_PROXY_RECURSION_DEPTH, 0 ); ///< the total VFS votes proxied to this account
+      share_type        pending_claimed_accounts = 0;
+      t_vector< recurrent_transfer_data > recurrent_transfers;
 
       using t_delayed_votes = t_vector< delayed_votes_data >;
       /*
