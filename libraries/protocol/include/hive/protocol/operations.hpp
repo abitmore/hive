@@ -71,6 +71,7 @@ namespace hive { namespace protocol {
         update_proposal_votes_operation,
         remove_proposal_operation,
         update_proposal_operation,
+        recurrent_transfer_operation,
 
 #ifdef HIVE_ENABLE_SMT
         /// SMT operations

@@ -1285,6 +1285,35 @@ namespace hive { namespace plugins { namespace condenser_api {
     legacy_asset      hive_transferred;
   };
 
+  struct legacy_recurrent_transfer_operation
+  {
+    legacy_recurrent_transfer_operation() {}
+    legacy_recurrent_transfer_operation( const recurrent_transfer_operation& op ) :
+    from( op.from ),
+    to( op.to ),
+    amount( legacy_asset::from_asset( op.amount ) ),
+    memo( op.memo ),
+    recurrence( op.recurrence )
+    {}
+
+    operator recurrent_transfer_operation()const
+    {
+      recurrent_transfer_operation op;
+      op.from = from;
+      op.to = to;
+      op.amount = amount;
+      op.memo = memo;
+      op.recurrence = recurrence;
+      return op;
+    }
+
+    account_name_type from;
+    account_name_type to;
+    legacy_asset      amount;
+    string            memo;
+    uint64_t          recurrence;
+  };
+
   typedef fc::static_variant<
         legacy_vote_operation,
         legacy_comment_operation,
@@ -1363,6 +1392,7 @@ namespace hive { namespace plugins { namespace condenser_api {
         legacy_account_created_operation,
         legacy_vesting_shares_split_operation,
         legacy_pow_reward_operation
+        legacy_recurrent_transfer_operation
       > legacy_operation;
 
   struct legacy_operation_conversion_visitor
@@ -1656,6 +1686,12 @@ namespace hive { namespace plugins { namespace condenser_api {
       return true;
     }
 
+    bool operator()( const recurrent_transfer_operation& op )const
+    {
+      l_op = legacy_recurrent_transfer_operation( op );
+      return true;
+    }
+
     // Should only be SMT ops
     template< typename T >
     bool operator()( const T& )const { return false; }
@@ -1872,6 +1908,11 @@ struct convert_from_legacy_operation_visitor
     return operation( hardfork_hive_restore_operation( op ) );
   }
 
+  operation operator()( const legacy_recurrent_transfer_operation& op )const
+  {
+    return operation( recurrent_transfer_operation( op ) );
+  }
+
   template< typename T >
   operation operator()( const T& t )const
   {
@@ -2070,5 +2111,6 @@ FC_REFLECT( hive::plugins::condenser_api::legacy_create_proposal_operation, (cre
 FC_REFLECT( hive::plugins::condenser_api::legacy_update_proposal_operation, (proposal_id)(creator)(daily_pay)(subject)(permlink)(extensions) )
 FC_REFLECT( hive::plugins::condenser_api::legacy_hardfork_hive_operation, (account)(treasury)(hbd_transferred)(hive_transferred)(vests_converted)(total_hive_from_vests) )
 FC_REFLECT( hive::plugins::condenser_api::legacy_hardfork_hive_restore_operation, (account)(treasury)(hbd_transferred)(hive_transferred) )
+FC_REFLECT( hive::plugins::condenser_api::legacy_recurrent_transfer_operation, (from)(to)(amount)(memo)(recurrence) )
 
 FC_REFLECT_TYPENAME( hive::plugins::condenser_api::legacy_operation )

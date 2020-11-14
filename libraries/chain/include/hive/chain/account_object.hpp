@@ -34,7 +34,7 @@ namespace hive { namespace chain {
         const account_name_type& _recovery_account,
         bool _fill_mana, const asset& incoming_delegation )
         : id( _id ), name( _name ), recovery_account( _recovery_account ), created( _creation_time ),
-        mined( _mined ), memo_key( _memo_key ), delayed_votes( a )
+        mined( _mined ), memo_key( _memo_key ), recurrent_transfers( a ), delayed_votes( a )
       {
         received_vesting_shares += incoming_delegation;
         voting_manabar.last_update_time = _creation_time.sec_since_epoch();
@@ -47,7 +47,7 @@ namespace hive { namespace chain {
       template< typename Allocator >
       account_object( allocator< Allocator > a, uint64_t _id,
         const account_name_type& _name, const public_key_type& _memo_key = public_key_type() )
-        : id( _id ), name( _name ), memo_key( _memo_key ), delayed_votes( a )
+        : id( _id ), name( _name ), memo_key( _memo_key ), recurrent_transfers( a ), delayed_votes( a )
       {}
 
       //liquid HIVE balance
@@ -196,7 +196,9 @@ namespace hive { namespace chain {
 
       fc::array<share_type, HIVE_MAX_PROXY_RECURSION_DEPTH> proxied_vsf_votes;// = std::vector<share_type>( HIVE_MAX_PROXY_RECURSION_DEPTH, 0 ); ///< the total VFS votes proxied to this account
       share_type        pending_claimed_accounts = 0;
-      t_vector< recurrent_transfer_data > recurrent_transfers;
+      using t_recurrent_transfers = t_vector< recurrent_transfer_data >;
+
+      t_recurrent_transfers recurrent_transfers;
 
       using t_delayed_votes = t_vector< delayed_votes_data >;
       /*
@@ -258,7 +260,7 @@ namespace hive { namespace chain {
                         share_type() );
       }
 
-    CHAINBASE_UNPACK_CONSTRUCTOR(account_object, (delayed_votes));
+    CHAINBASE_UNPACK_CONSTRUCTOR(account_object, (recurrent_transfers)(delayed_votes));
   };
 
   class account_metadata_object : public object< account_metadata_object_type, account_metadata_object >

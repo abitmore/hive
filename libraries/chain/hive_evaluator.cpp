@@ -3414,4 +3414,29 @@ void delegate_vesting_shares_evaluator::do_apply( const delegate_vesting_shares_
   }
 }
 
+
+void recurrent_transfer_evaluator::do_apply( const recurrent_transfer_operation& op )
+{
+  // TODO: HF25 assert
+  // TODO: authorize dhf transfer ?
+  // TODO: if amount is 0, remove the automatic transfer
+  const auto& account = _db.get_account( op.from );
+
+  /*recurrent_transfer_data* existing_recurrent_transfer = nullptr;
+  for(std::vector<recurrent_transfer_data>::iterator it = std::begin(account.recurrent_transfers); it != std::end(account.recurrent_transfers); ++it) {
+    existing_recurrent_transfer = it;
+  }*/
+
+  // If the transfer didn't exist, create it
+  //if (existing_recurrent_transfer == nullptr) {
+    _db.modify(account, [&](account_object &a) {
+      a.recurrent_transfers.emplace_back(
+              recurrent_transfer_data{HIVE_GENESIS_TIME, op.from, op.to, op.amount, op.memo, op.recurrence});;
+    });
+  /*} else {
+
+  }*/
+}
+
+
 } } // hive::chain

@@ -2764,4 +2764,30 @@ condenser_api::legacy_signed_transaction wallet_api::remove_proposal(const accou
   return my->sign_transaction( trx, broadcast );
 }
 
+
+  condenser_api::legacy_signed_transaction wallet_api::recurrent_transfer(
+    string from,
+    string to,
+    condenser_api::legacy_asset amount,
+    string memo,
+    uint64_t recurrence,
+    bool broadcast ) {
+      try {
+        FC_ASSERT( !is_locked() );
+        check_memo( memo, get_account( from ) );
+        recurrent_transfer_operation op;
+        op.from = from;
+        op.to = to;
+        op.amount = amount.to_asset();
+        op.memo = get_encrypted_memo( from, to, memo );
+        op.recurrence = recurrence;
+
+        signed_transaction tx;
+        tx.operations.push_back( op );
+        tx.validate();
+
+        return my->sign_transaction( tx, broadcast );
+      } FC_CAPTURE_AND_RETHROW( (from)(to)(amount)(memo)(recurrence)(broadcast) )
+}
+
 } } // hive::wallet

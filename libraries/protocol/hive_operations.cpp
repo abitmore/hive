@@ -727,4 +727,16 @@ namespace hive { namespace protocol {
     FC_ASSERT( vesting_shares >= asset( 0, VESTS_SYMBOL ), "Delegation cannot be negative" );
   }
 
+  void recurrent_transfer_operation::validate()const
+  { try {
+      validate_account_name( from );
+      validate_account_name( to );
+      FC_ASSERT( amount.symbol.is_vesting() == false, "Transfer of vesting is not allowed." );
+      FC_ASSERT( amount.amount > 0, "Cannot transfer a negative amount (aka: stealing)" );
+      FC_ASSERT( recurrence >= 1, "Cannot set a transfer recurrence that is less than one hour" );
+      FC_ASSERT( memo.size() < HIVE_MAX_MEMO_SIZE, "Memo is too large" );
+      FC_ASSERT( fc::is_utf8( memo ), "Memo is not UTF8" );
+    } FC_CAPTURE_AND_RETHROW( (*this) )
+  }
+
 } } // hive::protocol

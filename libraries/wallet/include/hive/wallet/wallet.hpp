@@ -721,7 +721,7 @@ class wallet_api
       * @param from The account the funds are coming from
       * @param to The account the funds are going to
       * @param amount The funds being transferred. i.e. "100.000 HIVE"
-      * @param memo A memo for the transactionm, encrypted with the to account's public memo key
+      * @param memo A memo for the transaction, encrypted with the to account's public memo key
       * @param broadcast true if you wish to broadcast the transaction
       */
     condenser_api::legacy_signed_transaction transfer(
@@ -892,7 +892,7 @@ class wallet_api
       *  @param request_id - an unique ID assigned by from account, the id is used to cancel the operation and can be reused after the transfer completes
       *  @param to         - the account getting the transfer
       *  @param amount     - the amount of assets to be transfered
-      *  @param memo A memo for the transactionm, encrypted with the to account's public memo key
+      *  @param memo A memo for the transaction, encrypted with the to account's public memo key
       *  @param broadcast true if you wish to broadcast the transaction
       */
     condenser_api::legacy_signed_transaction transfer_from_savings(
@@ -1275,6 +1275,26 @@ class wallet_api
     condenser_api::legacy_signed_transaction remove_proposal( const account_name_type& deleter,
                                             const flat_set< int64_t >& ids,
                                             bool broadcast );
+
+    /**
+      * Creates a recurrent transfer of funds from one account to another. HIVE and HBD can be transferred.
+      *
+      * @param from The account the funds are coming from
+      * @param to The account the funds are going to
+      * @param amount The funds being transferred. i.e. "100.000 HIVE"
+      * @param memo A memo for the transaction, encrypted with the to account's public memo key
+      * @param recurrence how often the transfer should be executed in hours. eg: 24
+      * @param broadcast true if you wish to broadcast the transaction
+      */
+    condenser_api::legacy_signed_transaction recurrent_transfer(
+            string from,
+            string to,
+            condenser_api::legacy_asset amount,
+            string memo,
+            uint64_t recurrence,
+            bool broadcast );
+
+
 };
 
 struct plain_keys {
@@ -1378,6 +1398,7 @@ FC_API( hive::wallet::wallet_api,
       (decrypt_memo)
       (decline_voting_rights)
       (claim_reward_balance)
+      (recurrent_transfer)
 
       /// helper api
       (get_prototype_operation)

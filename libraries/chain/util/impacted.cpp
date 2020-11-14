@@ -378,6 +378,13 @@ struct get_impacted_account_visitor
     _impacted.insert( op.old_recovery_account );
     _impacted.insert( op.new_recovery_account );
   }
+
+  void operator()( const recurrent_transfer_operation& op )
+  {
+    _impacted.insert( op.from );
+    _impacted.insert( op.to );
+  }
+
   //void operator()( const operation& op ){}
 };
 

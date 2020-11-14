@@ -14,6 +14,8 @@ namespace hive { namespace chain {
     asset             amount;
     /// The memo is plain-text, any encryption on the memo is up to a higher level protocol.
     string            memo;
+    /// How often will the payment be triggered, unit: hours
+    uint64_t recurrence;
   };
 
 } } // namespace hive::chain

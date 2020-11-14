@@ -3450,6 +3450,7 @@ void database::initialize_evaluators()
   _my->_evaluator_registry.register_evaluator< update_proposal_evaluator                >();
   _my->_evaluator_registry.register_evaluator< update_proposal_votes_evaluator          >();
   _my->_evaluator_registry.register_evaluator< remove_proposal_evaluator                >();
+  _my->_evaluator_registry.register_evaluator< recurrent_transfer_evaluator             >();
 
 
 #ifdef IS_TEST_NET
