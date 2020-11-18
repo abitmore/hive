@@ -281,6 +281,26 @@ namespace hive { namespace chain {
     CHAINBASE_UNPACK_CONSTRUCTOR(reward_fund_object);
   };
 
+  class recurrent_transfer_object : public object< recurrent_transfer_object_type, recurrent_transfer_object >
+  {
+    CHAINBASE_OBJECT( recurrent_transfer_object );
+    public:
+      CHAINBASE_DEFAULT_CONSTRUCTOR( recurrent_transfer_object)
+
+      const account_name_type get_from() const { return from; }
+
+      time_point_sec    time;
+      account_name_type from;
+      account_name_type to;
+      asset             amount;
+      /// The memo is plain-text, any encryption on the memo is up to a higher level protocol.
+      string            memo;
+      /// How often will the payment be triggered, unit: hours
+      uint64_t          recurrence;
+
+    CHAINBASE_UNPACK_CONSTRUCTOR(recurrent_transfer_object);
+  };
+
   struct by_price;
   struct by_expiration;
   struct by_account;
@@ -478,6 +498,17 @@ namespace hive { namespace chain {
     allocator< reward_fund_object >
   > reward_fund_index;
 
+  struct by_from;
+  //struct by_trigger_date;
+  typedef multi_index_container<
+    recurrent_transfer_object,
+    indexed_by<
+      ordered_unique< tag< by_from >,
+        member< recurrent_transfer_object, account_name_type, &recurrent_transfer_object::from > >
+      >,
+    allocator< recurrent_transfer_object >
+  > recurrent_transfer_index;
+
 } } // hive::chain
 
 #include <hive/chain/comment_object.hpp>
@@ -531,3 +562,7 @@ FC_REFLECT( hive::chain::reward_fund_object,
         (curation_reward_curve)
       )
 CHAINBASE_SET_INDEX_TYPE( hive::chain::reward_fund_object, hive::chain::reward_fund_index )
+
+FC_REFLECT(hive::chain::recurrent_transfer_object, (time)(from)(to)(amount)(memo))
+
+CHAINBASE_SET_INDEX_TYPE( hive::chain::recurrent_transfer_object, hive::chain::recurrent_transfer_index )

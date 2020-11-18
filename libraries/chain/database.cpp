@@ -3263,6 +3263,49 @@ void database::process_conversions()
   } );
 }
 
+/**
+  *  Iterates over all recurrent transfers with a due date date before
+  *  the head block time and then executes the transfers
+  */
+  /*
+void database::process_conversions()
+{
+  auto now = head_block_time();
+  const auto& request_by_date = get_index< convert_request_index >().indices().get< by_conversion_date >();
+  auto itr = request_by_date.begin();
+
+  const auto& fhistory = get_feed_history();
+  if( fhistory.current_median_history.is_null() )
+    return;
+
+  asset net_hbd( 0, HBD_SYMBOL );
+  asset net_hive( 0, HIVE_SYMBOL );
+
+  while( itr != request_by_date.end() && itr->conversion_date <= now )
+  {
+    auto amount_to_issue = itr->amount * fhistory.current_median_history;
+
+    adjust_balance( itr->owner, amount_to_issue );
+
+    net_hbd  += itr->amount;
+    net_hive += amount_to_issue;
+
+    push_virtual_operation( fill_convert_request_operation ( itr->owner, itr->requestid, itr->amount, amount_to_issue ) );
+
+    remove( *itr );
+    itr = request_by_date.begin();
+  }
+
+  const auto& props = get_dynamic_global_properties();
+  modify( props, [&]( dynamic_global_property_object& p )
+  {
+      p.current_supply += net_hive;
+      p.current_hbd_supply -= net_hbd;
+      p.virtual_supply += net_hive;
+      p.virtual_supply -= net_hbd * get_feed_history().current_median_history;
+  } );
+}*/
+
 asset database::to_hbd( const asset& hive )const
 {
   return util::to_hbd( get_feed_history().current_median_history, hive );
