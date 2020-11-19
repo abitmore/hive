@@ -287,11 +287,9 @@ namespace hive { namespace chain {
     public:
       CHAINBASE_DEFAULT_CONSTRUCTOR( recurrent_transfer_object)
 
-      const account_name_type get_from() const { return from; }
-
       time_point_sec    time;
-      account_name_type from;
-      account_name_type to;
+      account_id_type   from_id;
+      account_id_type   to_id;
       asset             amount;
       /// The memo is plain-text, any encryption on the memo is up to a higher level protocol.
       string            memo;
@@ -498,14 +496,21 @@ namespace hive { namespace chain {
     allocator< reward_fund_object >
   > reward_fund_index;
 
-  struct by_from;
-  //struct by_trigger_date;
+  struct by_from_id;
+  struct by_from_to_id;
   typedef multi_index_container<
     recurrent_transfer_object,
     indexed_by<
-      ordered_unique< tag< by_from >,
-        member< recurrent_transfer_object, account_name_type, &recurrent_transfer_object::from > >
-      >,
+      ordered_unique< tag< by_from_id >,
+        member< recurrent_transfer_object, account_id_type, &recurrent_transfer_object::from_id > >,
+      ordered_unique< tag< by_from_to_id >,
+        composite_key< recurrent_transfer_object,
+          member< recurrent_transfer_object, account_id_type, &recurrent_transfer_object::from_id >,
+          member< recurrent_transfer_object, account_id_type, &recurrent_transfer_object::to_id >
+        >,
+        composite_key_compare< std::less< account_id_type >, std::less< account_id_type > >
+      >
+    >,
     allocator< recurrent_transfer_object >
   > recurrent_transfer_index;
 
@@ -563,6 +568,5 @@ FC_REFLECT( hive::chain::reward_fund_object,
       )
 CHAINBASE_SET_INDEX_TYPE( hive::chain::reward_fund_object, hive::chain::reward_fund_index )
 
-FC_REFLECT(hive::chain::recurrent_transfer_object, (time)(from)(to)(amount)(memo))
-
+FC_REFLECT(hive::chain::recurrent_transfer_object, (time)(from_id)(to_id)(amount)(memo))
 CHAINBASE_SET_INDEX_TYPE( hive::chain::recurrent_transfer_object, hive::chain::recurrent_transfer_index )

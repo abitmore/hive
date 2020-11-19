@@ -3419,23 +3419,43 @@ void recurrent_transfer_evaluator::do_apply( const recurrent_transfer_operation&
 {
   // TODO: HF25 assert
   // TODO: authorize dhf transfer ?
-  // TODO: if amount is 0, remove the automatic transfer
-  const auto& account = _db.get_account( op.from );
+  const auto& from = _db.get_account( op.from );
+  const auto& to = _db.get_account( op.to );
 
-  /*recurrent_transfer_object* existing_recurrent_transfer = nullptr;
-  for(std::vector<recurrent_transfer_object>::iterator it = std::begin(account.recurrent_transfers); it != std::end(account.recurrent_transfers); ++it) {
-    existing_recurrent_transfer = it;
-  }*/
+  const auto& rt_idx = _db.get_index< recurrent_transfer_index >().indices().get< by_from_to_id >();
+  auto itr = rt_idx.find(boost::make_tuple(from.get_id(), to.get_id()));
 
-  // If the transfer didn't exist, create it
-  //if (existing_recurrent_transfer == nullptr) {
-    _db.modify(account, [&](account_object &a) {
-      a.recurrent_transfers.emplace_back(
-              recurrent_transfer_object{HIVE_GENESIS_TIME, op.from, op.to, op.amount, op.memo, op.recurrence});;
-    });
-  /*} else {
+  if( itr == rt_idx.end() )
+  {
+      _db.create< recurrent_transfer_object >( [&]( recurrent_transfer_object& rt )
+                                               {
+                                                   rt.time = HIVE_GENESIS_TIME;
+                                                   rt.from_id = from.get_id();
+                                                   rt.to_id = to.get_id();
+                                                   rt.amount = op.amount;
+                                                   rt.memo = op.memo;
+                                                   rt.recurrence = op.recurrence;
+                                               });
 
-  }*/
+      _db.modify( from, []( account_object& a )
+      {
+          a.pending_transfers++;
+      } );
+  } else if( op.amount.amount == 0 )
+  {
+      _db.remove( *itr );
+      _db.modify( from, [&]( account_object& a )
+      {
+          a.pending_transfers--;
+      });
+  } else {
+      _db.modify( *itr, [&]( recurrent_transfer_object& rt )
+      {
+          rt.amount = op.amount;
+          rt.memo = op.memo;
+          rt.recurrence = op.recurrence;
+      });
+  }
 }
 
 
