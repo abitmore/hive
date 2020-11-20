@@ -133,6 +133,8 @@ using namespace hive::protocol::testnet_blockchain_configuration;
 #define HIVE_VESTING_WITHDRAW_INTERVAL_SECONDS (60*60*24*7) /// 1 week per interval
 #define HIVE_MAX_WITHDRAW_ROUTES              10
 #define HIVE_MAX_PENDING_TRANSFERS            255
+#define HIVE_MAX_OPEN_RECURRENT_TRANSFERS     255
+#define HIVE_MAX_RECURRENT_TRANSFERS_PER_BLOCK 1000
 #define HIVE_SAVINGS_WITHDRAW_TIME            (fc::days(3))
 #define HIVE_SAVINGS_WITHDRAW_REQUEST_LIMIT   100
 #define HIVE_VOTING_MANA_REGENERATION_SECONDS (5*60*60*24) // 5 day

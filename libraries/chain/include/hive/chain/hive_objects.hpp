@@ -498,11 +498,20 @@ namespace hive { namespace chain {
 
   struct by_from_id;
   struct by_from_to_id;
+  struct by_trigger_date;
   typedef multi_index_container<
     recurrent_transfer_object,
     indexed_by<
+      ordered_unique< tag< by_id >,
+        const_mem_fun< recurrent_transfer_object, recurrent_transfer_object::id_type, &recurrent_transfer_object::get_id > >,
       ordered_unique< tag< by_from_id >,
         member< recurrent_transfer_object, account_id_type, &recurrent_transfer_object::from_id > >,
+      ordered_unique< tag< by_trigger_date >,
+        composite_key< recurrent_transfer_object,
+          member< recurrent_transfer_object, time_point_sec, &recurrent_transfer_object::time >,
+          const_mem_fun< recurrent_transfer_object, recurrent_transfer_object::id_type, &recurrent_transfer_object::get_id >
+        >
+      >,
       ordered_unique< tag< by_from_to_id >,
         composite_key< recurrent_transfer_object,
           member< recurrent_transfer_object, account_id_type, &recurrent_transfer_object::from_id >,

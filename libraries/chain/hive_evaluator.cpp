@@ -3419,32 +3419,36 @@ void recurrent_transfer_evaluator::do_apply( const recurrent_transfer_operation&
 {
   // TODO: HF25 assert
   // TODO: authorize dhf transfer ?
-  const auto& from = _db.get_account( op.from );
-  const auto& to = _db.get_account( op.to );
+  const auto& from_account = _db.get_account(op.from );
+  const auto& to_account = _db.get_account( op.to );
+
+  FC_ASSERT( from_account.pending_transfers != 0, "Recurrent transfer not found, cannot delete it");
 
   const auto& rt_idx = _db.get_index< recurrent_transfer_index >().indices().get< by_from_to_id >();
-  auto itr = rt_idx.find(boost::make_tuple(from.get_id(), to.get_id()));
+  auto itr = rt_idx.find(boost::make_tuple(from_account.get_id(), to_account.get_id()));
 
   if( itr == rt_idx.end() )
   {
+      // If the recurrent transfer is not found and the amount is 0 it means the user wants to delete a transfer that doesnt exists
+      FC_ASSERT( op.amount.amount != 0, "Recurrent transfer not found, cannot delete it");
       _db.create< recurrent_transfer_object >( [&]( recurrent_transfer_object& rt )
                                                {
                                                    rt.time = HIVE_GENESIS_TIME;
-                                                   rt.from_id = from.get_id();
-                                                   rt.to_id = to.get_id();
+                                                   rt.from_id = from_account.get_id();
+                                                   rt.to_id = to_account.get_id();
                                                    rt.amount = op.amount;
                                                    rt.memo = op.memo;
                                                    rt.recurrence = op.recurrence;
                                                });
 
-      _db.modify( from, []( account_object& a )
+      _db.modify(from_account, [](account_object& a )
       {
           a.pending_transfers++;
       } );
   } else if( op.amount.amount == 0 )
   {
       _db.remove( *itr );
-      _db.modify( from, [&]( account_object& a )
+      _db.modify(from_account, [&](account_object& a )
       {
           a.pending_transfers--;
       });
@@ -3457,6 +3461,5 @@ void recurrent_transfer_evaluator::do_apply( const recurrent_transfer_operation&
       });
   }
 }
-
 
 } } // hive::chain

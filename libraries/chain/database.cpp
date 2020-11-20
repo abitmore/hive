@@ -2331,6 +2331,48 @@ void database::process_delayed_voting( const block_notification& note )
 }
 
 /**
+  *  Iterates over all recurrent transfers with a due date date before
+  *  the head block time and then executes the transfers
+  */
+void database::process_recurrent_transfers()
+{
+// TODO: Set hf25
+  if( has_hardfork( HIVE_PROPOSALS_HARDFORK ) ) {
+      auto now = head_block_time();
+      const auto& recurrent_transfers_by_date = get_index< recurrent_transfer_index >().indices().get< by_trigger_date >();
+      auto itr = recurrent_transfers_by_date.begin();
+
+      // uint16_t is okay because we stop at 1000, if the limit changes, make sure to check if it fits in the integer.
+      uint16_t processed_transfers = 0;
+
+      while( itr != recurrent_transfers_by_date.end() && itr->time <= now )
+      {
+          // TODO: add a config const
+          // Since this is an intensive process, we don't want to process too many recurrent transfers in a single block
+          if (processed_transfers > HIVE_MAX_RECURRENT_TRANSFERS_PER_BLOCK) {
+              return;
+          }
+
+          const auto& from_account = get_account( itr->from_id );
+          const auto& to_account = get_account( itr->to_id );
+
+          adjust_balance( from_account, -itr->amount );
+          adjust_balance( to_account, itr->amount );
+
+          modify( *itr, [&]( recurrent_transfer_object& rt )
+          {
+              rt.time = now + fc::hours( itr->recurrence );
+          });
+
+          push_virtual_operation( fill_recurrent_transfer_operation ( from_account.name, to_account.name, itr->amount) );
+
+          processed_transfers++;
+          ++itr;
+      }
+  }
+}
+
+/**
   * This method updates total_reward_shares2 on DGPO, and children_rshares2 on comments, when a comment's rshares2 changes
   * from old_rshares2 to new_rshares2.  Maintaining invariants that children_rshares2 is the sum of all descendants' rshares2,
   * and dgpo.total_reward_shares2 is the total number of rshares2 outstanding.
@@ -3262,49 +3304,6 @@ void database::process_conversions()
       p.virtual_supply -= net_hbd * get_feed_history().current_median_history;
   } );
 }
-
-/**
-  *  Iterates over all recurrent transfers with a due date date before
-  *  the head block time and then executes the transfers
-  */
-  /*
-void database::process_conversions()
-{
-  auto now = head_block_time();
-  const auto& request_by_date = get_index< convert_request_index >().indices().get< by_conversion_date >();
-  auto itr = request_by_date.begin();
-
-  const auto& fhistory = get_feed_history();
-  if( fhistory.current_median_history.is_null() )
-    return;
-
-  asset net_hbd( 0, HBD_SYMBOL );
-  asset net_hive( 0, HIVE_SYMBOL );
-
-  while( itr != request_by_date.end() && itr->conversion_date <= now )
-  {
-    auto amount_to_issue = itr->amount * fhistory.current_median_history;
-
-    adjust_balance( itr->owner, amount_to_issue );
-
-    net_hbd  += itr->amount;
-    net_hive += amount_to_issue;
-
-    push_virtual_operation( fill_convert_request_operation ( itr->owner, itr->requestid, itr->amount, amount_to_issue ) );
-
-    remove( *itr );
-    itr = request_by_date.begin();
-  }
-
-  const auto& props = get_dynamic_global_properties();
-  modify( props, [&]( dynamic_global_property_object& p )
-  {
-      p.current_supply += net_hive;
-      p.current_hbd_supply -= net_hbd;
-      p.virtual_supply += net_hive;
-      p.virtual_supply -= net_hbd * get_feed_history().current_median_history;
-  } );
-}*/
 
 asset database::to_hbd( const asset& hive )const
 {

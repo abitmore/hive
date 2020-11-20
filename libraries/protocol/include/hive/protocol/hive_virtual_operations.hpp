@@ -350,6 +350,17 @@ namespace hive { namespace protocol {
     account_name_type new_recovery_account;
   };
 
+
+ struct fill_recurrent_transfer_operation : public virtual_operation
+ {
+     fill_recurrent_transfer_operation() {}
+     fill_recurrent_transfer_operation(account_name_type f, account_name_type t, const asset& a) : from(f), to( t ), amount( a ) {}
+
+     account_name_type from;
+     account_name_type to;
+     asset amount;
+ };
+
 } } //hive::protocol
 
 FC_REFLECT( hive::protocol::author_reward_operation, (author)(permlink)(hbd_payout)(hive_payout)(vesting_payout)(curators_vesting_payout)(payout_must_be_claimed) )
@@ -382,3 +393,4 @@ FC_REFLECT( hive::protocol::hardfork_hive_operation, (account)(treasury)(hbd_tra
 FC_REFLECT( hive::protocol::hardfork_hive_restore_operation, (account)(treasury)(hbd_transferred)(hive_transferred) )
 FC_REFLECT( hive::protocol::expired_account_notification_operation, (account) )
 FC_REFLECT( hive::protocol::changed_recovery_account_operation, (account)(old_recovery_account)(new_recovery_account) )
+FC_REFLECT( hive::protocol::fill_recurrent_transfer_operation, (from)(to)(amount) )

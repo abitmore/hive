@@ -119,7 +119,8 @@ enum enum_vops_filter : uint32_t
   ineffective_delete_comment_operation    = 0x00800000,
   sps_convert_operation                   = 0x01000000,
   expired_account_notification_operation  = 0x02000000,
-  changed_recovery_account_operation      = 0x04000000
+  changed_recovery_account_operation      = 0x04000000,
+  fill_recurrent_transfer_operation       = 0x08000000
 };
 
 /** Allows to specify range of blocks to retrieve virtual operations for.
