@@ -3418,20 +3418,20 @@ void delegate_vesting_shares_evaluator::do_apply( const delegate_vesting_shares_
 void recurrent_transfer_evaluator::do_apply( const recurrent_transfer_operation& op )
 {
   // TODO: HF25 assert
-  // TODO: authorize dhf transfer ?
+  // TODO: allow dhf transfer ?
   const auto& from_account = _db.get_account(op.from );
   const auto& to_account = _db.get_account( op.to );
 
-  FC_ASSERT( from_account.pending_transfers != 0, "Recurrent transfer not found, cannot delete it");
+  FC_ASSERT( from_account.pending_transfers <= HIVE_MAX_OPEN_RECURRENT_TRANSFERS, "Account can't have more than ${rt} recurrent transfers", ("rt",  HIVE_MAX_OPEN_RECURRENT_TRANSFERS) );
 
   const auto& rt_idx = _db.get_index< recurrent_transfer_index >().indices().get< by_from_to_id >();
   auto itr = rt_idx.find(boost::make_tuple(from_account.get_id(), to_account.get_id()));
 
   if( itr == rt_idx.end() )
   {
-      // If the recurrent transfer is not found and the amount is 0 it means the user wants to delete a transfer that doesnt exists
-      FC_ASSERT( op.amount.amount != 0, "Recurrent transfer not found, cannot delete it");
-      _db.create< recurrent_transfer_object >( [&]( recurrent_transfer_object& rt )
+    // If the recurrent transfer is not found and the amount is 0 it means the user wants to delete a transfer that doesnt exists
+    FC_ASSERT( op.amount.amount != 0, "Cannot create a recurrent transfer with 0 amount");
+    _db.create< recurrent_transfer_object >( [&]( recurrent_transfer_object& rt )
                                                {
                                                    rt.time = HIVE_GENESIS_TIME;
                                                    rt.from_id = from_account.get_id();
@@ -3441,24 +3441,32 @@ void recurrent_transfer_evaluator::do_apply( const recurrent_transfer_operation&
                                                    rt.recurrence = op.recurrence;
                                                });
 
-      _db.modify(from_account, [](account_object& a )
-      {
-          a.pending_transfers++;
-      } );
+    _db.modify(from_account, [](account_object& a )
+    {
+      a.pending_transfers++;
+    });
   } else if( op.amount.amount == 0 )
   {
-      _db.remove( *itr );
-      _db.modify(from_account, [&](account_object& a )
-      {
-          a.pending_transfers--;
-      });
-  } else {
-      _db.modify( *itr, [&]( recurrent_transfer_object& rt )
-      {
-          rt.amount = op.amount;
-          rt.memo = op.memo;
-          rt.recurrence = op.recurrence;
-      });
+    _db.remove( *itr );
+    _db.modify(from_account, [&](account_object& a )
+    {
+      a.pending_transfers--;
+    });
+  } else
+  {
+    // If updating the time result in the recurrent payment triggering sooner than what was planned, update it
+    time_point_sec next_trigger_time = itr->time;
+    if (next_trigger_time > _db.head_block_time() + fc::hours( op.recurrence )) {
+      next_trigger_time = _db.head_block_time() + fc::hours( op.recurrence );
+    }
+
+    _db.modify( *itr, [&]( recurrent_transfer_object& rt )
+    {
+      rt.amount = op.amount;
+      rt.memo = op.memo;
+      rt.recurrence = op.recurrence;
+      rt.time = next_trigger_time;
+    });
   }
 }
 

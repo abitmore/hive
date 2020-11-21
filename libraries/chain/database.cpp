@@ -2337,38 +2337,40 @@ void database::process_delayed_voting( const block_notification& note )
 void database::process_recurrent_transfers()
 {
 // TODO: Set hf25
+// TODO: if a recurrent payment fails x times in a row, remove it ?
   if( has_hardfork( HIVE_PROPOSALS_HARDFORK ) ) {
-      auto now = head_block_time();
-      const auto& recurrent_transfers_by_date = get_index< recurrent_transfer_index >().indices().get< by_trigger_date >();
-      auto itr = recurrent_transfers_by_date.begin();
+    auto now = head_block_time();
+    const auto& recurrent_transfers_by_date = get_index< recurrent_transfer_index >().indices().get< by_trigger_date >();
+    auto itr = recurrent_transfers_by_date.begin();
 
-      // uint16_t is okay because we stop at 1000, if the limit changes, make sure to check if it fits in the integer.
-      uint16_t processed_transfers = 0;
+    // uint16_t is okay because we stop at 1000, if the limit changes, make sure to check if it fits in the integer.
+    uint16_t processed_transfers = 0;
 
-      while( itr != recurrent_transfers_by_date.end() && itr->time <= now )
-      {
-          // TODO: add a config const
-          // Since this is an intensive process, we don't want to process too many recurrent transfers in a single block
-          if (processed_transfers > HIVE_MAX_RECURRENT_TRANSFERS_PER_BLOCK) {
-              return;
-          }
-
-          const auto& from_account = get_account( itr->from_id );
-          const auto& to_account = get_account( itr->to_id );
-
-          adjust_balance( from_account, -itr->amount );
-          adjust_balance( to_account, itr->amount );
-
-          modify( *itr, [&]( recurrent_transfer_object& rt )
-          {
-              rt.time = now + fc::hours( itr->recurrence );
-          });
-
-          push_virtual_operation( fill_recurrent_transfer_operation ( from_account.name, to_account.name, itr->amount) );
-
-          processed_transfers++;
-          ++itr;
+    while( itr != recurrent_transfers_by_date.end() && itr->time <= now )
+    {
+      // Since this is an intensive process, we don't want to process too many recurrent transfers in a single block
+      if (processed_transfers > HIVE_MAX_RECURRENT_TRANSFERS_PER_BLOCK) {
+        return;
       }
+      const auto& from_account = get_account( itr->from_id );
+      const auto& to_account = get_account( itr->to_id );
+
+      asset available = get_balance( from_account, itr->amount.symbol );
+      // If we have enough money, we proceed with the transfer
+      if (available >= itr->amount) {
+        adjust_balance(from_account, -itr->amount);
+        adjust_balance(to_account, itr->amount);
+
+        modify( *itr, [&]( recurrent_transfer_object& rt )
+        {
+          rt.time = now + fc::hours( itr->recurrence );
+        });
+
+        push_virtual_operation(fill_recurrent_transfer_operation(from_account.name, to_account.name, itr->amount));
+        processed_transfers++;
+      }
+      ++itr;
+    }
   }
 }
 
@@ -4025,6 +4027,7 @@ void database::_apply_block( const signed_block& next_block )
   process_decline_voting_rights();
   process_proposals( note );
   process_delayed_voting( note );
+  process_recurrent_transfers();
 
   generate_required_actions();
   generate_optional_actions();
