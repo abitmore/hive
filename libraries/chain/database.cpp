@@ -2336,9 +2336,8 @@ void database::process_delayed_voting( const block_notification& note )
   */
 void database::process_recurrent_transfers()
 {
-// TODO: Set hf25
 // TODO: if a recurrent payment fails x times in a row, remove it ?
-  if( has_hardfork( HIVE_PROPOSALS_HARDFORK ) ) {
+  if( has_hardfork( HIVE_HARDFORK_1_25 ) ) {
     auto now = head_block_time();
     const auto& recurrent_transfers_by_date = get_index< recurrent_transfer_index >().indices().get< by_trigger_date >();
     auto itr = recurrent_transfers_by_date.begin();
@@ -2350,14 +2349,16 @@ void database::process_recurrent_transfers()
     {
       // Since this is an intensive process, we don't want to process too many recurrent transfers in a single block
       if (processed_transfers > HIVE_MAX_RECURRENT_TRANSFERS_PER_BLOCK) {
+        ilog("Reached max processed recurrent transfers this block");
         return;
       }
-      const auto& from_account = get_account( itr->from_id );
-      const auto& to_account = get_account( itr->to_id );
 
+      const auto& from_account = get_account( itr->from_id );
       asset available = get_balance( from_account, itr->amount.symbol );
       // If we have enough money, we proceed with the transfer
       if (available >= itr->amount) {
+        // TODO: should we auto convert HIVE transfers to the dhf ?
+        const auto& to_account = get_account( itr->to_id );
         adjust_balance(from_account, -itr->amount);
         adjust_balance(to_account, itr->amount);
 

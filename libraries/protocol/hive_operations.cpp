@@ -693,6 +693,7 @@ namespace hive { namespace protocol {
     FC_ASSERT( is_asset_type( reward_hbd, HBD_SYMBOL ), "Reward HBD must be expressed in HBD" );
     FC_ASSERT( is_asset_type( reward_vests, VESTS_SYMBOL ), "Reward VESTS must be expressed in VESTS" );
     FC_ASSERT( reward_hbd.amount >= 0, "Cannot claim a negative amount" );
+    FC_ASSERT( reward_hive.amount >= 0, "Cannot claim a negative amount" );
     FC_ASSERT( reward_vests.amount >= 0, "Cannot claim a negative amount" );
     FC_ASSERT( reward_hive.amount > 0 || reward_hbd.amount > 0 || reward_vests.amount > 0, "Must claim something." );
   }

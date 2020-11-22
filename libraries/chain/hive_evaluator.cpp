@@ -3417,8 +3417,7 @@ void delegate_vesting_shares_evaluator::do_apply( const delegate_vesting_shares_
 
 void recurrent_transfer_evaluator::do_apply( const recurrent_transfer_operation& op )
 {
-  // TODO: HF25 assert
-  // TODO: allow dhf transfer ?
+  FC_ASSERT( _db.has_hardfork( HIVE_HARDFORK_1_25 ), "Recurrent transfers are not enabled until hardfork ${hf}", ("hf", HIVE_HARDFORK_1_25) );
   const auto& from_account = _db.get_account(op.from );
   const auto& to_account = _db.get_account( op.to );
 
