@@ -733,7 +733,7 @@ namespace hive { namespace protocol {
       validate_account_name( to );
       FC_ASSERT( amount.symbol.is_vesting() == false, "Transfer of vesting is not allowed." );
       FC_ASSERT( amount.amount >= 0, "Cannot transfer a negative amount (aka: stealing)" );
-      FC_ASSERT( recurrence >= 1, "Cannot set a transfer recurrence that is less than one hour" );
+      FC_ASSERT( recurrence >= 24, "Cannot set a transfer recurrence that is less than 24 hours" );
       FC_ASSERT( memo.size() < HIVE_MAX_MEMO_SIZE, "Memo is too large" );
       FC_ASSERT( fc::is_utf8( memo ), "Memo is not UTF8" );
     } FC_CAPTURE_AND_RETHROW( (*this) )
