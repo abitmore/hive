@@ -505,7 +505,8 @@ struct api_account_object
     last_vote_time( a.last_vote_time ),
     post_bandwidth( a.post_bandwidth ),
     pending_claimed_accounts( a.pending_claimed_accounts ),
-    governance_vote_expiration_ts( a.get_governance_vote_expiration_ts())
+    governance_vote_expiration_ts( a.get_governance_vote_expiration_ts()),
+    open_recurrent_transfers( a.open_recurrent_transfers )
   {
     if( a.has_proxy() )
       proxy = db.get_account( a.get_proxy() ).get_name();
@@ -617,6 +618,7 @@ struct api_account_object
   uint32_t          post_bandwidth = 0;
 
   share_type        pending_claimed_accounts = 0;
+  uint16_t          open_recurrent_transfers = 0;
 
   bool              is_smt = false;
 
@@ -1112,7 +1114,7 @@ FC_REFLECT( hive::plugins::database_api::api_account_object,
           (posting_rewards)
           (proxied_vsf_votes)(witnesses_voted_for)
           (last_post)(last_root_post)(last_post_edit)(last_vote_time)
-          (post_bandwidth)(pending_claimed_accounts)
+          (post_bandwidth)(pending_claimed_accounts)(open_recurrent_transfers)
           (is_smt)
           (delayed_votes)
           (governance_vote_expiration_ts)

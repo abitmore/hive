@@ -287,7 +287,8 @@ namespace hive { namespace chain {
     public:
       CHAINBASE_DEFAULT_CONSTRUCTOR( recurrent_transfer_object)
 
-      time_point_sec    time;
+      time_point_sec    trigger_date;
+      time_point_sec    end_date;
       account_id_type   from_id;
       account_id_type   to_id;
       asset             amount;
@@ -500,6 +501,7 @@ namespace hive { namespace chain {
 
   struct by_from_to_id;
   struct by_trigger_date;
+  struct by_end_date;
   typedef multi_index_container<
     recurrent_transfer_object,
     indexed_by<
@@ -507,7 +509,13 @@ namespace hive { namespace chain {
         const_mem_fun< recurrent_transfer_object, recurrent_transfer_object::id_type, &recurrent_transfer_object::get_id > >,
       ordered_unique< tag< by_trigger_date >,
         composite_key< recurrent_transfer_object,
-          member< recurrent_transfer_object, time_point_sec, &recurrent_transfer_object::time >,
+          member< recurrent_transfer_object, time_point_sec, &recurrent_transfer_object::trigger_date >,
+          const_mem_fun< recurrent_transfer_object, recurrent_transfer_object::id_type, &recurrent_transfer_object::get_id >
+        >
+      >,
+      ordered_unique< tag< by_end_date >,
+        composite_key< recurrent_transfer_object,
+          member< recurrent_transfer_object, time_point_sec, &recurrent_transfer_object::end_date >,
           const_mem_fun< recurrent_transfer_object, recurrent_transfer_object::id_type, &recurrent_transfer_object::get_id >
         >
       >,
@@ -576,5 +584,5 @@ FC_REFLECT( hive::chain::reward_fund_object,
       )
 CHAINBASE_SET_INDEX_TYPE( hive::chain::reward_fund_object, hive::chain::reward_fund_index )
 
-FC_REFLECT(hive::chain::recurrent_transfer_object, (time)(from_id)(to_id)(amount)(memo))
+FC_REFLECT(hive::chain::recurrent_transfer_object, (trigger_date)(from_id)(to_id)(amount)(memo)(recurrence)(consecutive_failures)(end_date))
 CHAINBASE_SET_INDEX_TYPE( hive::chain::recurrent_transfer_object, hive::chain::recurrent_transfer_index )

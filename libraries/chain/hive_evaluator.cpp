@@ -3418,6 +3418,10 @@ void delegate_vesting_shares_evaluator::do_apply( const delegate_vesting_shares_
 void recurrent_transfer_evaluator::do_apply( const recurrent_transfer_operation& op )
 {
   FC_ASSERT( _db.has_hardfork( HIVE_HARDFORK_1_25 ), "Recurrent transfers are not enabled until hardfork ${hf}", ("hf", HIVE_HARDFORK_1_25) );
+
+  FC_ASSERT(op.end_date > _db.head_block_time(), "Cannot set the end date in the past");
+  FC_ASSERT(op.end_date < _db.head_block_time() + fc::days(HIVE_MAX_RECURRENT_TRANSFER_END_DATE), "Cannot set an end date that is more than ${days} days in the future", ("days", HIVE_MAX_RECURRENT_TRANSFER_END_DATE));
+
   const auto& from_account = _db.get_account(op.from );
   const auto& to_account = _db.get_account( op.to );
 
@@ -3436,31 +3440,32 @@ void recurrent_transfer_evaluator::do_apply( const recurrent_transfer_operation&
     FC_ASSERT( op.amount.amount != 0, "Cannot create a recurrent transfer with 0 amount");
     _db.create< recurrent_transfer_object >( [&]( recurrent_transfer_object& rt )
                                                {
-                                                   rt.time = HIVE_GENESIS_TIME;
+                                                   rt.trigger_date = HIVE_GENESIS_TIME;
                                                    rt.from_id = from_account.get_id();
                                                    rt.to_id = to_account.get_id();
                                                    rt.amount = op.amount;
                                                    rt.memo = op.memo;
                                                    rt.recurrence = op.recurrence;
+                                                   rt.end_date = op.end_date;
                                                });
 
     _db.modify(from_account, [](account_object& a )
     {
-      a.pending_transfers++;
+      a.open_recurrent_transfers++;
     });
   } else if( op.amount.amount == 0 )
   {
     _db.remove( *itr );
     _db.modify(from_account, [&](account_object& a )
     {
-      a.pending_transfers--;
+      a.open_recurrent_transfers--;
     });
   } else
   {
     // If updating the time result in the recurrent payment triggering sooner than what was planned, update it
-    time_point_sec next_trigger_time = itr->time;
-    if (next_trigger_time > _db.head_block_time() + fc::hours( op.recurrence )) {
-      next_trigger_time = _db.head_block_time() + fc::hours( op.recurrence );
+    time_point_sec next_trigger_date = itr->trigger_date;
+    if (next_trigger_date > _db.head_block_time() + fc::hours(op.recurrence )) {
+      next_trigger_date = _db.head_block_time() + fc::hours(op.recurrence );
     }
 
     _db.modify( *itr, [&]( recurrent_transfer_object& rt )
@@ -3468,7 +3473,8 @@ void recurrent_transfer_evaluator::do_apply( const recurrent_transfer_operation&
       rt.amount = op.amount;
       rt.memo = op.memo;
       rt.recurrence = op.recurrence;
-      rt.time = next_trigger_time;
+      rt.trigger_date = next_trigger_date;
+      rt.end_date = op.end_date;
     });
   }
 }

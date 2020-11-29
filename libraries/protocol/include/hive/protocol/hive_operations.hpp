@@ -1094,7 +1094,9 @@ namespace hive { namespace protocol {
     string            memo;
 
     /// How often will the payment be triggered, unit: hours
-    uint16_t recurrence;
+    uint16_t          recurrence;
+
+    time_point_sec    end_date;
 
     void              validate()const;
     void get_required_active_authorities( flat_set<account_name_type>& a )const{ a.insert(from); }

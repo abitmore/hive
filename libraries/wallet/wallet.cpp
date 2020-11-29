@@ -2771,6 +2771,7 @@ condenser_api::legacy_signed_transaction wallet_api::remove_proposal(const accou
     condenser_api::legacy_asset amount,
     string memo,
     uint64_t recurrence,
+    time_point_sec end_date,
     bool broadcast ) {
       try {
         FC_ASSERT( !is_locked() );
@@ -2781,13 +2782,14 @@ condenser_api::legacy_signed_transaction wallet_api::remove_proposal(const accou
         op.amount = amount.to_asset();
         op.memo = get_encrypted_memo( from, to, memo );
         op.recurrence = recurrence;
+        op.end_date = end_date;
 
         signed_transaction tx;
         tx.operations.push_back( op );
         tx.validate();
 
         return my->sign_transaction( tx, broadcast );
-      } FC_CAPTURE_AND_RETHROW( (from)(to)(amount)(memo)(recurrence)(broadcast) )
+      } FC_CAPTURE_AND_RETHROW( (from)(to)(amount)(memo)(recurrence)(end_date)(broadcast) )
 }
 
 } } // hive::wallet
