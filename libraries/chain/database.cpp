@@ -2354,11 +2354,11 @@ void database::process_recurrent_transfers()
       }
 
       const auto& from_account = get_account( itr->from_id );
+      const auto& to_account = get_account( itr->to_id );
       asset available = get_balance( from_account, itr->amount.symbol );
+
       // If we have enough money, we proceed with the transfer
       if (available >= itr->amount) {
-        // TODO: should we auto convert HIVE transfers to the dhf ?
-        const auto& to_account = get_account( itr->to_id );
         adjust_balance(from_account, -itr->amount);
         adjust_balance(to_account, itr->amount);
 
@@ -2369,6 +2369,24 @@ void database::process_recurrent_transfers()
 
         push_virtual_operation(fill_recurrent_transfer_operation(from_account.name, to_account.name, itr->amount));
         processed_transfers++;
+      } else {
+        uint8_t consecutive_failures = itr->consecutive_failures + 1;
+
+        if (consecutive_failures < HIVE_MAX_CONSECUTIVE_RECURRENT_TRANSFER_FAILURES) {
+          modify(*itr, [&](recurrent_transfer_object &rt) {
+            rt.consecutive_failures = consecutive_failures;
+            rt.time = now + fc::hours(itr->recurrence);
+          });
+        } else {
+          // if we had too many consecutive failures, remove the recurrent payment object
+          remove( *itr );
+          modify(from_account, [&](account_object& a )
+          {
+            a.pending_transfers--;
+          });
+        }
+
+        push_virtual_operation(failed_recurrent_transfer_operation(from_account.name, to_account.name, itr->amount, consecutive_failures));
       }
       ++itr;
     }

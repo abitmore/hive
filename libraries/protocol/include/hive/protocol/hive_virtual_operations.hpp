@@ -361,6 +361,17 @@ namespace hive { namespace protocol {
      asset amount;
  };
 
+ struct failed_recurrent_transfer_operation : public virtual_operation
+ {
+   failed_recurrent_transfer_operation() {}
+   failed_recurrent_transfer_operation(account_name_type f, account_name_type t, const asset& a, uint8_t cf) : from(f), to( t ), amount( a ), consecutive_failures( cf ) {}
+
+     account_name_type from;
+     account_name_type to;
+     asset amount;
+     uint8_t consecutive_failures;
+ };
+
 } } //hive::protocol
 
 FC_REFLECT( hive::protocol::author_reward_operation, (author)(permlink)(hbd_payout)(hive_payout)(vesting_payout)(curators_vesting_payout)(payout_must_be_claimed) )
@@ -394,3 +405,4 @@ FC_REFLECT( hive::protocol::hardfork_hive_restore_operation, (account)(treasury)
 FC_REFLECT( hive::protocol::expired_account_notification_operation, (account) )
 FC_REFLECT( hive::protocol::changed_recovery_account_operation, (account)(old_recovery_account)(new_recovery_account) )
 FC_REFLECT( hive::protocol::fill_recurrent_transfer_operation, (from)(to)(amount) )
+FC_REFLECT( hive::protocol::failed_recurrent_transfer_operation, (from)(to)(amount) (consecutive_failures) )

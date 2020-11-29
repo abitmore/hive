@@ -117,7 +117,8 @@ namespace hive { namespace protocol {
         pow_reward_operation,
         vesting_shares_split_operation,
         account_created_operation,
-        fill_recurrent_transfer_operation
+        fill_recurrent_transfer_operation,
+        failed_recurrent_transfer_operation
       > operation;
 
   /*void operation_get_required_authorities( const operation& op,

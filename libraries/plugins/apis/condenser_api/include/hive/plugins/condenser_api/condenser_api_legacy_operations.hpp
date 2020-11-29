@@ -83,6 +83,7 @@ namespace hive { namespace plugins { namespace condenser_api {
   typedef expired_account_notification_operation legacy_expired_account_notification_operation;
   typedef changed_recovery_account_operation     legacy_changed_recovery_account_operation;
   typedef fill_recurrent_transfer_operation      legacy_fill_recurrent_transfer_operation;
+  typedef failed_recurrent_transfer_operation      legacy_failed_recurrent_transfer_operation;
 
   struct legacy_price
   {
@@ -1394,7 +1395,8 @@ namespace hive { namespace plugins { namespace condenser_api {
         legacy_vesting_shares_split_operation,
         legacy_pow_reward_operation
         legacy_recurrent_transfer_operation,
-        legacy_fill_recurrent_transfer_operation
+        legacy_fill_recurrent_transfer_operation,
+        legacy_failed_recurrent_transfer_operation
       > legacy_operation;
 
   struct legacy_operation_conversion_visitor
@@ -1442,6 +1444,7 @@ namespace hive { namespace plugins { namespace condenser_api {
     bool operator()( const expired_account_notification_operation& op )const   { l_op = op; return true; }
     bool operator()( const changed_recovery_account_operation& op )const       { l_op = op; return true; }
     bool operator()( const fill_recurrent_transfer_operation& op )const        { l_op = op; return true; }
+    bool operator()( const failed_recurrent_transfer_operation& op )const        { l_op = op; return true; }
 
     bool operator()( const transfer_operation& op )const
     {

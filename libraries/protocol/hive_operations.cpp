@@ -736,6 +736,7 @@ namespace hive { namespace protocol {
       FC_ASSERT( recurrence >= 24, "Cannot set a transfer recurrence that is less than 24 hours" );
       FC_ASSERT( memo.size() < HIVE_MAX_MEMO_SIZE, "Memo is too large" );
       FC_ASSERT( fc::is_utf8( memo ), "Memo is not UTF8" );
+      FC_ASSERT( from != to, "Cannot set a transfer to yourself" );
     } FC_CAPTURE_AND_RETHROW( (*this) )
   }
 

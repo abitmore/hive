@@ -3423,6 +3423,10 @@ void recurrent_transfer_evaluator::do_apply( const recurrent_transfer_operation&
 
   FC_ASSERT( from_account.pending_transfers <= HIVE_MAX_OPEN_RECURRENT_TRANSFERS, "Account can't have more than ${rt} recurrent transfers", ("rt",  HIVE_MAX_OPEN_RECURRENT_TRANSFERS) );
 
+  asset available = _db.get_balance( from_account, op.amount.symbol );
+
+  FC_ASSERT( available >= op.amount, "Account does not have enough tokens for the first transfer, has ${has} needs ${needs}", ("has",  available)("needs", op.amount) );
+
   const auto& rt_idx = _db.get_index< recurrent_transfer_index >().indices().get< by_from_to_id >();
   auto itr = rt_idx.find(boost::make_tuple(from_account.get_id(), to_account.get_id()));
 

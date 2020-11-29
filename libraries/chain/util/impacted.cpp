@@ -196,6 +196,7 @@ struct get_impacted_account_visitor
   void operator()( const recurrent_transfer_operation& op )
   {
       _impacted.insert( op.from );
+      _impacted.insert( op.to );
   }
 
   // vops
@@ -384,6 +385,12 @@ struct get_impacted_account_visitor
   }
 
   void operator()( const fill_recurrent_transfer_operation& op )
+  {
+    _impacted.insert( op.from );
+    _impacted.insert( op.to );
+  }
+
+  void operator()( const failed_recurrent_transfer_operation& op )
   {
     _impacted.insert( op.from );
     _impacted.insert( op.to );

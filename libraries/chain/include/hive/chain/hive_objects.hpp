@@ -294,7 +294,9 @@ namespace hive { namespace chain {
       /// The memo is plain-text, any encryption on the memo is up to a higher level protocol.
       string            memo;
       /// How often will the payment be triggered, unit: hours
-      uint64_t          recurrence;
+      uint16_t          recurrence;
+      // How many payment have failed in a row, at HIVE_MAX_CONSECUTIVE_RECURRENT_TRANSFER_FAILURES the object is deleted
+      uint8_t          consecutive_failures;
 
     CHAINBASE_UNPACK_CONSTRUCTOR(recurrent_transfer_object);
   };
