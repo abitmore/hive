@@ -2366,7 +2366,7 @@ void database::process_recurrent_transfers()
 
         modify( current_recurrent_transfer, [&]( recurrent_transfer_object& rt )
         {
-          rt.trigger_date = now + fc::seconds( current_recurrent_transfer.recurrence );
+          rt.trigger_date = now + fc::hours( current_recurrent_transfer.recurrence );
         });
 
         push_virtual_operation(fill_recurrent_transfer_operation(from_account.name, to_account.name, current_recurrent_transfer.amount));
@@ -2377,7 +2377,7 @@ void database::process_recurrent_transfers()
         if (consecutive_failures < HIVE_MAX_CONSECUTIVE_RECURRENT_TRANSFER_FAILURES) {
           modify(current_recurrent_transfer, [&](recurrent_transfer_object &rt) {
             rt.consecutive_failures = consecutive_failures;
-            rt.trigger_date = now + fc::seconds(current_recurrent_transfer.recurrence);
+            rt.trigger_date = now + fc::hours(current_recurrent_transfer.recurrence);
           });
           // false means the recurrent transfer was not deleted
           push_virtual_operation(failed_recurrent_transfer_operation(from_account.name, to_account.name, current_recurrent_transfer.amount, consecutive_failures, false));

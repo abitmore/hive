@@ -3462,9 +3462,9 @@ void recurrent_transfer_evaluator::do_apply( const recurrent_transfer_operation&
     });
   } else
   {
-    // If updating the time result in the recurrent payment triggering sooner than what was planned, update it
+    // If the recurrence is different, update the next trigger date to reflect it
     time_point_sec next_trigger_date = itr->trigger_date;
-    if (next_trigger_date > _db.head_block_time() + fc::hours(op.recurrence )) {
+    if (itr->recurrence != op.recurrence) {
       next_trigger_date = _db.head_block_time() + fc::hours(op.recurrence );
     }
 

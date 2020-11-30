@@ -8985,5 +8985,180 @@ BOOST_AUTO_TEST_CASE( account_update2_apply )
   }
   FC_LOG_AND_RETHROW()
 }
+
+
+BOOST_AUTO_TEST_CASE( recurrent_transfer_validate )
+{
+  try
+  {
+    BOOST_TEST_MESSAGE( "Testing: recurrent_transfer_validate" );
+
+    recurrent_transfer_operation op;
+    op.from = "alice";
+    op.to = "bob";
+    op.memo = "Memo";
+    op.recurrence = 24;
+    op.amount = asset( 100, HIVE_SYMBOL );
+    op.validate();
+
+    BOOST_TEST_MESSAGE( " --- Invalid from account" );
+    op.from = "alice-";
+    HIVE_REQUIRE_THROW( op.validate(), fc::assert_exception );
+    op.from = "alice";
+
+    BOOST_TEST_MESSAGE( " --- Invalid to account" );
+    op.to = "bob-";
+    HIVE_REQUIRE_THROW( op.validate(), fc::assert_exception );
+    op.to = "bob";
+
+    BOOST_TEST_MESSAGE( " --- Memo too long" );
+    std::string memo;
+    for ( int i = 0; i < HIVE_MAX_MEMO_SIZE + 1; i++ )
+      memo += "x";
+    op.memo = memo;
+    HIVE_REQUIRE_THROW( op.validate(), fc::assert_exception );
+    op.memo = "Memo";
+
+    BOOST_TEST_MESSAGE( " --- Negative amount" );
+    op.amount = -op.amount;
+    HIVE_REQUIRE_THROW( op.validate(), fc::assert_exception );
+    op.amount = -op.amount;
+
+    BOOST_TEST_MESSAGE( " --- Transferring vests" );
+    op.amount = asset( 100, VESTS_SYMBOL );
+    HIVE_REQUIRE_THROW( op.validate(), fc::assert_exception );
+    op.amount = asset( 100, HIVE_SYMBOL );
+
+    BOOST_TEST_MESSAGE( " --- Recurrence too low" );
+    op.recurrence = 3;
+    HIVE_REQUIRE_THROW( op.validate(), fc::assert_exception );
+    op.recurrence = 24;
+
+    BOOST_TEST_MESSAGE( " --- Transfer to yourself" );
+    op.from = "bob";
+    HIVE_REQUIRE_THROW( op.validate(), fc::assert_exception );
+    op.from = "alice";
+
+    op.validate();
+  }
+  FC_LOG_AND_RETHROW()
+}
+
+
+BOOST_AUTO_TEST_CASE( recurrent_transfer_apply )
+{
+  try
+  {
+    BOOST_TEST_MESSAGE( "Testing: recurrent_transfer_apply" );
+
+    ACTORS( (alice)(bob) )
+
+    generate_block();
+
+    BOOST_REQUIRE( alice.open_recurrent_transfers == 0 );
+
+    fund( "alice", 10000 );
+    fund( "alice", ASSET("100.000 TBD") );
+
+    BOOST_REQUIRE( get_balance( "alice" ).amount.value == ASSET( "10.000 TESTS" ).amount.value );
+
+    signed_transaction tx;
+    recurrent_transfer_operation op;
+    op.from = "alice";
+    op.to = "bob";
+    op.memo = "test";
+    op.amount = ASSET( "5.000 TESTS" );
+    op.recurrence = 72;
+    op.end_date = db->head_block_time() + fc::days( 60 );
+
+    BOOST_TEST_MESSAGE( "--- Test normal transaction" );
+    tx.operations.push_back( op );
+    tx.set_expiration( db->head_block_time() + HIVE_MAX_TIME_UNTIL_EXPIRATION );
+    sign( tx, alice_private_key );
+    db->push_transaction( tx, 0 );
+    tx.clear();
+
+    BOOST_REQUIRE( get_balance( "alice" ).amount.value == ASSET( "10.000 TESTS" ).amount.value );
+    BOOST_REQUIRE( get_balance( "bob" ).amount.value == ASSET( "0.000 TESTS" ).amount.value );
+    BOOST_REQUIRE( db->get_account( "alice" ).open_recurrent_transfers == 1 );
+    validate_database();
+
+    generate_block();
+    BOOST_TEST_MESSAGE( "--- test genesis recurrent transfer execution" );
+    BOOST_REQUIRE( get_balance( "alice" ).amount.value == ASSET( "5.000 TESTS" ).amount.value );
+    BOOST_REQUIRE( get_balance( "bob" ).amount.value == ASSET( "5.000 TESTS" ).amount.value );
+
+    BOOST_TEST_MESSAGE( "--- test recurrent transfer trigger date post genesis execution" );
+    const auto& recurrent_transfer = db->find< recurrent_transfer_object, by_from_to_id >(boost::make_tuple( alice_id, bob_id) );
+
+    BOOST_REQUIRE( recurrent_transfer->trigger_date == db->head_block_time() + fc::hours(op.recurrence) );
+
+    BOOST_TEST_MESSAGE( "--- test updating the recurrent transfer parameters" );
+
+    op.memo = "test_updated";
+    op.amount = ASSET( "2.000 TESTS" );
+    op.end_date = db->head_block_time() + fc::days( 45 );
+
+    tx.operations.push_back( op );
+    tx.set_expiration( db->head_block_time() + HIVE_MAX_TIME_UNTIL_EXPIRATION );
+    sign( tx, alice_private_key );
+    db->push_transaction( tx, 0 );
+    tx.clear();
+
+    const auto recurrent_transfer_new = db->find< recurrent_transfer_object, by_from_to_id >(boost::make_tuple( alice_id, bob_id) )->copy_chain_object();
+
+    BOOST_REQUIRE( recurrent_transfer_new.trigger_date == recurrent_transfer->trigger_date);
+    BOOST_REQUIRE( recurrent_transfer_new.recurrence == 72 );
+    BOOST_REQUIRE( recurrent_transfer_new.amount == ASSET( "2.000 TESTS" ) );
+    BOOST_REQUIRE( recurrent_transfer_new.end_date == op.end_date );
+    BOOST_REQUIRE( recurrent_transfer_new.memo == "test_updated" );
+
+    generate_block();
+
+    BOOST_TEST_MESSAGE( "--- test setting the amount to HBD" );
+
+    op.amount = ASSET("10.000 TBD");
+    tx.operations.push_back( op );
+    tx.set_expiration( db->head_block_time() + HIVE_MAX_TIME_UNTIL_EXPIRATION );
+    sign( tx, alice_private_key );
+    db->push_transaction( tx, 0 );
+    tx.clear();
+
+    BOOST_REQUIRE( recurrent_transfer->amount == ASSET("10.000 TBD") );
+
+    generate_block();
+    BOOST_TEST_MESSAGE( "--- test updating the reccurence" );
+
+    op.recurrence = 100;
+    tx.operations.push_back( op );
+    tx.set_expiration( db->head_block_time() + HIVE_MAX_TIME_UNTIL_EXPIRATION );
+    sign( tx, alice_private_key );
+    db->push_transaction( tx, 0 );
+    tx.clear();
+
+    BOOST_REQUIRE( recurrent_transfer->trigger_date == db->head_block_time() + fc::hours(op.recurrence) );
+    BOOST_REQUIRE( recurrent_transfer->recurrence == 100 );
+    BOOST_REQUIRE( recurrent_transfer->trigger_date != recurrent_transfer_new.trigger_date );
+
+
+    generate_block();
+    BOOST_TEST_MESSAGE( "--- test deleting the recurrent transfer" );
+
+    op.amount = ASSET("0.000 TESTS");
+    tx.operations.push_back( op );
+    tx.set_expiration( db->head_block_time() + HIVE_MAX_TIME_UNTIL_EXPIRATION );
+    sign( tx, alice_private_key );
+    db->push_transaction( tx, 0 );
+    tx.clear();
+
+    const auto* deleted_recurrent_transfer = db->find< recurrent_transfer_object, by_from_to_id >(boost::make_tuple( alice_id, bob_id) );
+    BOOST_REQUIRE( deleted_recurrent_transfer == nullptr );
+
+    
+  }
+  FC_LOG_AND_RETHROW()
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
 #endif
