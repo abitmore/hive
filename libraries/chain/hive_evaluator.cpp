@@ -3425,7 +3425,7 @@ void recurrent_transfer_evaluator::do_apply( const recurrent_transfer_operation&
   const auto& from_account = _db.get_account(op.from );
   const auto& to_account = _db.get_account( op.to );
 
-  FC_ASSERT( from_account.pending_transfers <= HIVE_MAX_OPEN_RECURRENT_TRANSFERS, "Account can't have more than ${rt} recurrent transfers", ("rt",  HIVE_MAX_OPEN_RECURRENT_TRANSFERS) );
+  FC_ASSERT( from_account.open_recurrent_transfers < HIVE_MAX_OPEN_RECURRENT_TRANSFERS, "Account can't have more than ${rt} recurrent transfers", ("rt",  HIVE_MAX_OPEN_RECURRENT_TRANSFERS) );
 
   asset available = _db.get_balance( from_account, op.amount.symbol );
 

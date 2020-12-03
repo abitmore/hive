@@ -2347,7 +2347,7 @@ void database::process_recurrent_transfers()
     while( itr != recurrent_transfers_by_date.end() && itr->trigger_date <= now )
     {
       // Since this is an intensive process, we don't want to process too many recurrent transfers in a single block
-      if (processed_transfers > HIVE_MAX_RECURRENT_TRANSFERS_PER_BLOCK) {
+      if (processed_transfers >= HIVE_MAX_RECURRENT_TRANSFERS_PER_BLOCK) {
         ilog("Reached max processed recurrent transfers this block");
         return;
       }
@@ -2371,6 +2371,8 @@ void database::process_recurrent_transfers()
 
         push_virtual_operation(fill_recurrent_transfer_operation(from_account.name, to_account.name, current_recurrent_transfer.amount));
         processed_transfers++;
+        elog("processed ${processed_transfers} blocks", ("processed_transfers", processed_transfers));
+
       } else {
         uint8_t consecutive_failures = current_recurrent_transfer.consecutive_failures + 1;
 
@@ -2412,12 +2414,12 @@ void database::expire_recurrent_transfers()
       const auto& old_recurrent_transfer = *itr;
       ++itr;
 
-      remove( old_recurrent_transfer );
-
       modify(get_account( old_recurrent_transfer.from_id ), [&](account_object& a )
       {
         a.open_recurrent_transfers--;
       });
+
+      remove( old_recurrent_transfer );
     }
   }
 }
