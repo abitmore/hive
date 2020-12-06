@@ -92,6 +92,7 @@ class database_api_impl
       (list_proposals)
       (find_proposals)
       (list_proposal_votes)
+      (find_recurrent_transfers)
       (get_transaction_hex)
       (get_required_signatures)
       (get_potential_signatures)
@@ -1541,6 +1542,25 @@ DEFINE_API_IMPL( database_api_impl, list_proposal_votes )
   return result;
 }
 
+/* Find recurrent transfers   */
+
+DEFINE_API_IMPL( database_api_impl, find_recurrent_transfers ) {
+  find_recurrent_transfers_return result;
+
+  const auto& from_account = _db.get_account( args.from );
+  auto from_account_id = from_account.get_id();
+
+  const auto &idx = _db.get_index<chain::recurrent_transfer_index, chain::by_from_id>();
+  auto itr = idx.lower_bound(from_account_id);
+
+  while (itr != idx.end() && itr->from_id == from_account_id && result.recurrent_transfers.size() <= DATABASE_API_SINGLE_QUERY_LIMIT) {
+    const auto& to_account = _db.get_account( itr->to_id );
+    result.recurrent_transfers.emplace_back(*itr, _db, from_account.name, to_account.name);
+    ++itr;
+  }
+
+  return result;
+}
 
 //////////////////////////////////////////////////////////////////////
 //                                                                  //
@@ -1954,6 +1974,7 @@ DEFINE_READ_APIS( database_api,
   (find_proposals)
   (list_proposal_votes)
   (get_order_book)
+  (find_recurrent_transfers)
   (get_transaction_hex)
   (get_required_signatures)
   (get_potential_signatures)

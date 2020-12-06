@@ -918,6 +918,7 @@ DEFINE_API_ARGS( is_known_transaction,                   vector< variant >,   bo
 DEFINE_API_ARGS( list_proposals,                         vector< variant >,   vector< api_proposal_object > )
 DEFINE_API_ARGS( find_proposals,                         vector< variant >,   vector< api_proposal_object > )
 DEFINE_API_ARGS( list_proposal_votes,                    vector< variant >,   vector< database_api::api_proposal_vote_object > )
+DEFINE_API_ARGS( find_recurrent_transfers,               vector< variant >,   vector< database_api::api_recurrent_transfer_object > )
 
 #undef DEFINE_API_ARGS
 
@@ -1016,6 +1017,7 @@ public:
     (list_proposals)
     (find_proposals)
     (list_proposal_votes)
+    (find_recurrent_transfers)
   )
 
   private:

@@ -2366,6 +2366,7 @@ void database::process_recurrent_transfers()
 
         modify( current_recurrent_transfer, [&]( recurrent_transfer_object& rt )
         {
+          rt.consecutive_failures = 0; // reset the consecutive failures counter
           rt.trigger_date = now + fc::hours( current_recurrent_transfer.recurrence );
         });
 

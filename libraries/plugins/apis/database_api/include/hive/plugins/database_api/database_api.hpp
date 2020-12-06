@@ -109,6 +109,11 @@ class database_api
       (find_proposals)
       (list_proposal_votes)
 
+      ////////////////////////
+      // Recurrent payments //
+      ////////////////////////
+      (find_recurrent_transfers)
+
       ////////////////////////////
       // Authority / validation //
       ////////////////////////////

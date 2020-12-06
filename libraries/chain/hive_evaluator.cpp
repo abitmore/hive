@@ -3447,6 +3447,7 @@ void recurrent_transfer_evaluator::do_apply( const recurrent_transfer_operation&
                                                    rt.memo = op.memo;
                                                    rt.recurrence = op.recurrence;
                                                    rt.end_date = op.end_date;
+                                                   rt.consecutive_failures = 0;
                                                });
 
     _db.modify(from_account, [](account_object& a )

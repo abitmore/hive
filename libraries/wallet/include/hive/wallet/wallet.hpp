@@ -1280,7 +1280,7 @@ class wallet_api
       * Creates a recurrent transfer of funds from one account to another. HIVE and HBD can be transferred.
       *
       * @param from The account the funds are coming from
-      * @param to The account the funds are going to
+      * @param to The account from which the funds are going to
       * @param amount The funds being transferred. i.e. "100.000 HIVE"
       * @param memo A memo for the transaction, encrypted with the to account's public memo key
       * @param recurrence how often the transfer should be executed in hours. eg: 24
@@ -1288,13 +1288,21 @@ class wallet_api
       * @param broadcast true if you wish to broadcast the transaction
       */
     condenser_api::legacy_signed_transaction recurrent_transfer(
-            string from,
-            string to,
+            account_name_type from,
+            account_name_type to,
             condenser_api::legacy_asset amount,
             string memo,
             uint64_t recurrence,
             time_point_sec end_date,
             bool broadcast );
+
+  /**
+      * Finds a recurrent transfer
+
+      * @param from The account from which the funds are coming from
+      */
+  vector< database_api::api_recurrent_transfer_object > find_recurrent_transfers(
+          account_name_type from );
 
 
 };
@@ -1347,6 +1355,7 @@ FC_API( hive::wallet::wallet_api,
       (get_account_history)
       (get_state)
       (get_withdraw_routes)
+      (find_recurrent_transfers)
 
       /// transaction api
       (claim_account_creation)

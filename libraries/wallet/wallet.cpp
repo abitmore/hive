@@ -2764,10 +2764,9 @@ condenser_api::legacy_signed_transaction wallet_api::remove_proposal(const accou
   return my->sign_transaction( trx, broadcast );
 }
 
-
   condenser_api::legacy_signed_transaction wallet_api::recurrent_transfer(
-    string from,
-    string to,
+    account_name_type from,
+    account_name_type to,
     condenser_api::legacy_asset amount,
     string memo,
     uint64_t recurrence,
@@ -2790,6 +2789,11 @@ condenser_api::legacy_signed_transaction wallet_api::remove_proposal(const accou
 
         return my->sign_transaction( tx, broadcast );
       } FC_CAPTURE_AND_RETHROW( (from)(to)(amount)(memo)(recurrence)(end_date)(broadcast) )
-}
+  }
+
+  vector< database_api::api_recurrent_transfer_object > wallet_api::find_recurrent_transfers(account_name_type from)
+  {
+    return my->_remote_api->find_recurrent_transfers( from );
+  }
 
 } } // hive::wallet
