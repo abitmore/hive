@@ -3111,7 +3111,7 @@ BOOST_AUTO_TEST_CASE( recurrent_transfer_expiration )
 {
   try
   {
-    BOOST_TEST_MESSAGE( "Testing: recurrent_transfer_apply" );
+    BOOST_TEST_MESSAGE( "Testing: recurrent transfer expiration" );
 
     ACTORS( (alice)(bob) )
     generate_block();
@@ -3132,7 +3132,6 @@ BOOST_AUTO_TEST_CASE( recurrent_transfer_expiration )
     op.recurrence = 24;
     op.end_date = db->head_block_time() + fc::days( 1 ) + fc::hours(3);
 
-    BOOST_TEST_MESSAGE( "--- Test normal transaction" );
     tx.operations.push_back( op );
     tx.set_expiration( db->head_block_time() + HIVE_MAX_TIME_UNTIL_EXPIRATION );
     sign( tx, alice_private_key );
@@ -3158,6 +3157,63 @@ BOOST_AUTO_TEST_CASE( recurrent_transfer_expiration )
     BOOST_TEST_MESSAGE( "--- test recurrent transfer fully executed" );
     BOOST_REQUIRE( get_balance( "alice" ).amount.value == ASSET( "90.000 TESTS" ).amount.value );
     BOOST_REQUIRE( get_balance( "bob" ).amount.value == ASSET( "10.000 TESTS" ).amount.value );
+    BOOST_REQUIRE( recurrent_transfer == nullptr );
+    BOOST_REQUIRE( db->get_account( "alice" ).open_recurrent_transfers == 0 );
+    validate_database();
+ }
+ FC_LOG_AND_RETHROW()
+}
+
+BOOST_AUTO_TEST_CASE( recurrent_transfer_consecutive_failure_deletion )
+{
+  try
+  {
+    BOOST_TEST_MESSAGE( "Testing: recurrent transfer failure deletion" );
+
+    ACTORS( (alice)(bob) )
+    generate_block();
+
+    BOOST_REQUIRE( alice.open_recurrent_transfers == 0 );
+
+    fund( "alice", ASSET("5.000 TESTS") );
+    fund( "alice", ASSET("100.000 TBD") );
+
+    BOOST_REQUIRE( get_balance( "alice" ).amount.value == ASSET( "5.000 TESTS" ).amount.value );
+
+    signed_transaction tx;
+    recurrent_transfer_operation op;
+    op.from = "alice";
+    op.to = "bob";
+    op.memo = "test";
+    op.amount = ASSET( "5.000 TESTS" );
+    op.recurrence = 24;
+    op.end_date = db->head_block_time() + fc::days( 100 );
+
+    tx.operations.push_back( op );
+    tx.set_expiration( db->head_block_time() + HIVE_MAX_TIME_UNTIL_EXPIRATION );
+    sign( tx, alice_private_key );
+    db->push_transaction( tx, 0 );
+    tx.clear();
+
+    BOOST_REQUIRE( get_balance( "alice" ).amount.value == ASSET( "5.000 TESTS" ).amount.value );
+    BOOST_REQUIRE( get_balance( "bob" ).amount.value == ASSET( "0.000 TESTS" ).amount.value );
+    BOOST_REQUIRE( db->get_account( "alice" ).open_recurrent_transfers == 1 );
+    validate_database();
+
+    generate_block();
+    BOOST_TEST_MESSAGE( "--- test initial recurrent transfer execution" );
+    BOOST_REQUIRE( get_balance( "alice" ).amount.value == ASSET( "0.000 TESTS" ).amount.value );
+    BOOST_REQUIRE( get_balance( "bob" ).amount.value == ASSET( "5.000 TESTS" ).amount.value );
+    validate_database();
+
+    auto blocks_until_failure = (fc::days(10) + fc::seconds(60) ).to_seconds() / HIVE_BLOCK_INTERVAL;
+    ilog("generating ${blocks} blocks", ("blocks", blocks_until_failure));
+    generate_blocks( blocks_until_failure );
+
+    const auto* recurrent_transfer = db->find< recurrent_transfer_object, by_from_to_id >(boost::make_tuple( alice_id, bob_id) );
+    BOOST_TEST_MESSAGE( "--- test recurrent transfer got deleted" );
+    BOOST_REQUIRE( get_balance( "alice" ).amount.value == ASSET( "0.000 TESTS" ).amount.value );
+    BOOST_REQUIRE( get_balance( "bob" ).amount.value == ASSET( "5.000 TESTS" ).amount.value );
     BOOST_REQUIRE( recurrent_transfer == nullptr );
     BOOST_REQUIRE( db->get_account( "alice" ).open_recurrent_transfers == 0 );
     validate_database();
