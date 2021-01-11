@@ -285,7 +285,13 @@ namespace hive { namespace chain {
   {
     CHAINBASE_OBJECT( recurrent_transfer_object );
     public:
-      CHAINBASE_DEFAULT_CONSTRUCTOR( recurrent_transfer_object)
+      recurrent_transfer_object(uint64_t _id,
+      const time_point_sec& _trigger_date, const time_point_sec& _end_date, const account_id_type& _from_id,
+      const account_id_type& _to_id,  const asset& _amount, const string& _memo, const uint16_t& _recurrence,
+      const uint8_t& _consecutive_failures = 0)
+      : id( _id ), trigger_date( _trigger_date ), end_date( _end_date ), from_id( _from_id ), to_id( _to_id ),
+      amount( _amount ), memo(_memo), recurrence( _recurrence), consecutive_failures(_consecutive_failures)
+      {}
 
       time_point_sec    trigger_date;
       time_point_sec    end_date;
@@ -295,11 +301,11 @@ namespace hive { namespace chain {
       /// The memo is plain-text, any encryption on the memo is up to a higher level protocol.
       string            memo;
       /// How often will the payment be triggered, unit: hours
-      uint16_t          recurrence;
+      uint16_t          recurrence = 0;
       // How many payment have failed in a row, at HIVE_MAX_CONSECUTIVE_RECURRENT_TRANSFER_FAILURES the object is deleted
-      uint8_t          consecutive_failures;
+      uint8_t          consecutive_failures = 0;
 
-    CHAINBASE_UNPACK_CONSTRUCTOR(recurrent_transfer_object);
+      CHAINBASE_UNPACK_CONSTRUCTOR(recurrent_transfer_object);
   };
 
   struct by_price;
@@ -591,5 +597,5 @@ FC_REFLECT( hive::chain::reward_fund_object,
       )
 CHAINBASE_SET_INDEX_TYPE( hive::chain::reward_fund_object, hive::chain::reward_fund_index )
 
-FC_REFLECT(hive::chain::recurrent_transfer_object, (trigger_date)(from_id)(to_id)(amount)(memo)(recurrence)(consecutive_failures)(end_date))
+FC_REFLECT(hive::chain::recurrent_transfer_object, (id)(trigger_date)(from_id)(to_id)(amount)(memo)(recurrence)(consecutive_failures)(end_date))
 CHAINBASE_SET_INDEX_TYPE( hive::chain::recurrent_transfer_object, hive::chain::recurrent_transfer_index )

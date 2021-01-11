@@ -679,7 +679,7 @@ void delete_comment_evaluator::do_apply( const delete_comment_operation& o )
     _db.remove(cur_vote);
   }
 
-  /// this loop can be skiped for validate-only nodes as it is merely gathering stats for indicies
+  /// this loop can be skiped for validate-only nodes as it is merely gathering stats for indices
   if( _db.has_hardfork( HIVE_HARDFORK_0_6__80 ) && !comment.is_root() )
   {
     auto parent = &_db.get_comment( comment.get_parent_id() );
@@ -3436,19 +3436,10 @@ void recurrent_transfer_evaluator::do_apply( const recurrent_transfer_operation&
 
   if( itr == rt_idx.end() )
   {
+
     // If the recurrent transfer is not found and the amount is 0 it means the user wants to delete a transfer that doesnt exists
     FC_ASSERT( op.amount.amount != 0, "Cannot create a recurrent transfer with 0 amount");
-    _db.create< recurrent_transfer_object >( [&]( recurrent_transfer_object& rt )
-                                               {
-                                                   rt.trigger_date = HIVE_GENESIS_TIME;
-                                                   rt.from_id = from_account.get_id();
-                                                   rt.to_id = to_account.get_id();
-                                                   rt.amount = op.amount;
-                                                   rt.memo = op.memo;
-                                                   rt.recurrence = op.recurrence;
-                                                   rt.end_date = op.end_date;
-                                                   rt.consecutive_failures = 0;
-                                               });
+    _db.create< recurrent_transfer_object >(HIVE_GENESIS_TIME, op.end_date, from_account.get_id(), to_account.get_id(), op.amount, op.memo, op.recurrence, 0);
 
     _db.modify(from_account, [](account_object& a )
     {
