@@ -285,13 +285,16 @@ namespace hive { namespace chain {
   {
     CHAINBASE_OBJECT( recurrent_transfer_object );
     public:
-      recurrent_transfer_object(uint64_t _id,
+      template< typename Allocator >
+      recurrent_transfer_object(allocator< Allocator > a, uint64_t _id,
       const time_point_sec& _trigger_date, const time_point_sec& _end_date, const account_id_type& _from_id,
       const account_id_type& _to_id,  const asset& _amount, const string& _memo, const uint16_t& _recurrence,
       const uint8_t& _consecutive_failures = 0)
       : id( _id ), trigger_date( _trigger_date ), end_date( _end_date ), from_id( _from_id ), to_id( _to_id ),
       amount( _amount ), memo(_memo), recurrence( _recurrence), consecutive_failures(_consecutive_failures)
-      {}
+      {
+        FC_ASSERT( _recurrence != 0 );
+      }
 
       time_point_sec    trigger_date;
       time_point_sec    end_date;
