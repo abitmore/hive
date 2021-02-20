@@ -9251,10 +9251,12 @@ BOOST_AUTO_TEST_CASE( recurrent_transfer_max_open_transfers )
   try
   {
     BOOST_TEST_MESSAGE( "Testing: too many open recurrent transfers" );
+    ACTORS( (alice)(bob) )
+
+    generate_block();
 
     #define CREATE_ACTORS(z, n, text) ACTORS( (actor ## n) );
     BOOST_PP_REPEAT(HIVE_MAX_OPEN_RECURRENT_TRANSFERS, CREATE_ACTORS, )
-    ACTORS( (alice)(bob) )
     generate_block();
 
     BOOST_REQUIRE( alice.open_recurrent_transfers == 0 );
@@ -9306,10 +9308,12 @@ BOOST_AUTO_TEST_CASE( recurrent_transfer_max_transfer_processed_per_block )
   try
   {
     BOOST_TEST_MESSAGE( "Testing: too many open recurrent transfers" );
+    ACTORS( (alice)(bob)(eve)(martin) )
+    generate_block();
 
     #define CREATE_ACTORS(z, n, text) ACTORS( (actor ## n) );
     BOOST_PP_REPEAT(251, CREATE_ACTORS, )
-    ACTORS( (alice)(bob)(eve)(martin) )
+
     generate_block();
     const char *senders[4] = { "alice", "bob", "eve", "martin" };
     const fc::ecc::private_key senders_keys[4] = { alice_private_key, bob_private_key, eve_private_key, martin_private_key };
