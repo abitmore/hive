@@ -1089,14 +1089,14 @@ namespace hive { namespace protocol {
     account_name_type to;
     /// The amount of asset to transfer from @ref from to @ref to
     asset             amount;
-
     /// The memo is plain-text, any encryption on the memo is up to a higher level protocol.
     string            memo;
-
     /// How often will the payment be triggered, unit: hours
     uint16_t          recurrence;
 
     time_point_sec    end_date;
+    /// Extensions. Not currently used.
+    extensions_type   extensions;
 
     void              validate()const;
     void get_required_active_authorities( flat_set<account_name_type>& a )const{ a.insert(from); }
