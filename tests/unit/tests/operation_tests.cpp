@@ -9055,7 +9055,8 @@ BOOST_AUTO_TEST_CASE( recurrent_transfer_apply )
     ACTORS( (alice)(bob) )
     generate_block();
 
-    BOOST_REQUIRE( alice.open_recurrent_transfers == 0 );
+    idump((alice.open_recurrent_transfers));
+    BOOST_REQUIRE( db->get_account( "alice" ).open_recurrent_transfers == 0 );
 
     fund( "alice", 10000 );
     fund( "alice", ASSET("100.000 TBD") );
@@ -9208,7 +9209,7 @@ BOOST_AUTO_TEST_CASE( recurrent_transfer_hbd )
     ACTORS( (alice)(bob) )
     generate_block();
 
-    BOOST_REQUIRE( alice.open_recurrent_transfers == 0 );
+    BOOST_REQUIRE( db->get_account( "alice" ).open_recurrent_transfers == 0 );
 
     fund( "alice", ASSET("100.000 TBD") );
 
@@ -9259,7 +9260,7 @@ BOOST_AUTO_TEST_CASE( recurrent_transfer_max_open_transfers )
     BOOST_PP_REPEAT(HIVE_MAX_OPEN_RECURRENT_TRANSFERS, CREATE_ACTORS, )
     generate_block();
 
-    BOOST_REQUIRE( alice.open_recurrent_transfers == 0 );
+    BOOST_REQUIRE( db->get_account( "alice" ).open_recurrent_transfers == 0 );
 
     fund( "alice", ASSET("10000.000 TESTS") );
 

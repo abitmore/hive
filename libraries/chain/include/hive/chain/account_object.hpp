@@ -186,8 +186,6 @@ namespace hive { namespace chain {
       uint16_t          pending_transfers = 0; //for now max is 255, but it might change
       uint16_t          witnesses_voted_for = 0; //max 30, why is it 16bit?
 
-      uint16_t          recurrent_transfers = 0; //for now max is 255, but it might change
-
       uint8_t           savings_withdraw_requests = 0;
       bool              can_vote = true;
       bool              mined = true;
@@ -197,7 +195,6 @@ namespace hive { namespace chain {
       public_key_type   memo_key;   //public_key_type - 33 bytes
 
       fc::array<share_type, HIVE_MAX_PROXY_RECURSION_DEPTH> proxied_vsf_votes;// = std::vector<share_type>( HIVE_MAX_PROXY_RECURSION_DEPTH, 0 ); ///< the total VFS votes proxied to this account
-      share_type        pending_claimed_accounts = 0;
 
       using t_delayed_votes = t_vector< delayed_votes_data >;
       /*
@@ -618,7 +615,6 @@ FC_REFLECT( hive::chain::account_object,
           (delayed_votes)
           (sum_delayed_votes)
           (governance_vote_expiration_ts)
-          (recurrent_transfers)
           (open_recurrent_transfers)
         )
 

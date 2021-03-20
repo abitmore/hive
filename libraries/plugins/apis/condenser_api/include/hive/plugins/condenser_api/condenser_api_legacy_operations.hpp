@@ -1396,7 +1396,7 @@ namespace hive { namespace plugins { namespace condenser_api {
         legacy_transfer_to_vesting_completed_operation,
         legacy_account_created_operation,
         legacy_vesting_shares_split_operation,
-        legacy_pow_reward_operation
+        legacy_pow_reward_operation,
         legacy_recurrent_transfer_operation,
         legacy_fill_recurrent_transfer_operation,
         legacy_failed_recurrent_transfer_operation

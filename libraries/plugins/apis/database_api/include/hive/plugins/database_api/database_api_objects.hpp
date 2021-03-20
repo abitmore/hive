@@ -505,8 +505,8 @@ struct api_account_object
     last_vote_time( a.last_vote_time ),
     post_bandwidth( a.post_bandwidth ),
     pending_claimed_accounts( a.pending_claimed_accounts ),
-    governance_vote_expiration_ts( a.get_governance_vote_expiration_ts()),
-    open_recurrent_transfers( a.open_recurrent_transfers )
+    open_recurrent_transfers( a.open_recurrent_transfers ),
+    governance_vote_expiration_ts( a.get_governance_vote_expiration_ts())
   {
     if( a.has_proxy() )
       proxy = db.get_account( a.get_proxy() ).get_name();
