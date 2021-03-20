@@ -3116,7 +3116,7 @@ BOOST_AUTO_TEST_CASE( recurrent_transfer_expiration )
     ACTORS( (alice)(bob) )
     generate_block();
 
-    BOOST_REQUIRE( alice.open_recurrent_transfers == 0 );
+    BOOST_REQUIRE( db->get_account( "alice" ).open_recurrent_transfers == 0 );
 
     fund( "alice", ASSET("100.000 TESTS") );
     fund( "alice", ASSET("100.000 TBD") );
@@ -3173,7 +3173,7 @@ BOOST_AUTO_TEST_CASE( recurrent_transfer_consecutive_failure_deletion )
     ACTORS( (alice)(bob) )
     generate_block();
 
-    BOOST_REQUIRE( alice.open_recurrent_transfers == 0 );
+    BOOST_REQUIRE( db->get_account( "alice" ).open_recurrent_transfers == 0 );
 
     fund( "alice", ASSET("5.000 TESTS") );
     fund( "alice", ASSET("100.000 TBD") );

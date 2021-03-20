@@ -2765,11 +2765,11 @@ condenser_api::legacy_signed_transaction wallet_api::remove_proposal(const accou
 }
 
   condenser_api::legacy_signed_transaction wallet_api::recurrent_transfer(
-    account_name_type from,
-    account_name_type to,
-    condenser_api::legacy_asset amount,
-    string memo,
-    uint64_t recurrence,
+    const account_name_type from,
+    const account_name_type to,
+    const condenser_api::legacy_asset amount,
+    const string memo,
+    uint16_t recurrence,
     time_point_sec end_date,
     bool broadcast ) {
       try {

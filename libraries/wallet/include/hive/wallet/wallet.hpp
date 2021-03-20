@@ -1292,7 +1292,7 @@ class wallet_api
             account_name_type to,
             condenser_api::legacy_asset amount,
             string memo,
-            uint64_t recurrence,
+            uint16_t recurrence,
             time_point_sec end_date,
             bool broadcast );
 
