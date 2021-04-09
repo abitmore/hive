@@ -183,15 +183,22 @@ if __name__ == "__main__":
         print(60 * '=')
         print(' Network successfully prepared')
         print(60 * '=')
+        print()
 
-        while True:
-          input('Press enter to disconnect networks')
-          alpha_net.disconnect_from(beta_net)
-          print('Disconnected')
+        print('Waiting for block 50')
+        alpha_node0.wait_for_block(50)
 
-          input('Press enter to reconnect networks')
-          alpha_net.connect_with(beta_net)
-          print('Reconnected')
+        alpha_net.disconnect_from(beta_net)
+        print('Disconnected')
+
+        print('Waiting for block 70')
+        alpha_node0.wait_for_block(70)
+
+        alpha_net.connect_with(beta_net)
+        print('Reconnected')
+
+        while(True):
+          pass
 
     except Exception as _ex:
         log.exception(str(_ex))
