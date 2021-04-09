@@ -38,7 +38,7 @@ using namespace hive::chain;
 using namespace hive::protocol;
 using fc::string;
 
-constexpr int DAYS_FOR_DELAYED_VOTING{ (HIVE_DELAYED_VOTING_TOTAL_INTERVAL_SECONDS / HIVE_DELAYED_VOTING_INTERVAL_SECONDS) };
+const int DAYS_FOR_DELAYED_VOTING{ (HIVE_DELAYED_VOTING_TOTAL_INTERVAL_SECONDS / HIVE_DELAYED_VOTING_INTERVAL_SECONDS) };
 
 #define VOTING_POWER( account ) db->get_account( account ).witness_vote_weight().value
 #define PROXIED_VSF( account ) db->get_account( account ).proxied_vsf_votes_total().value
