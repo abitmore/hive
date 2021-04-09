@@ -930,6 +930,8 @@ private:
   bool                             _reindexing = false;
 
   bool                             _prune = false;
+
+  uint32_t                         _highest_irreversible_block_number = 0;
 };
 
 void account_history_rocksdb_plugin::impl::collectOptions(const boost::program_options::variables_map& options)
@@ -1981,7 +1983,14 @@ void account_history_rocksdb_plugin::impl::on_irreversible_block( uint32_t block
     while(itr != volatile_idx.end() && itr->block <= block_num)
     {
       rocksdb_operation_object obj(*itr);
-      importOperation(obj, itr->impacted);
+      if(_highest_irreversible_block_number < obj.block)
+        importOperation(obj, itr->impacted);
+      else
+      {
+        elog("                               ===================      GOTCHA       ===================");
+        elog("_highest_irreversible_block_number is ${hi} while operation block is ${txb}",
+          ("hi", _highest_irreversible_block_number) ("txb", obj.block));
+      }
       to_delete.push_back(&(*itr));
       ++itr;
     }
@@ -1991,7 +2000,12 @@ void account_history_rocksdb_plugin::impl::on_irreversible_block( uint32_t block
       _mainDb.remove(*o);
     }
 
+
+    if(_highest_irreversible_block_number < block_num)
+      _highest_irreversible_block_number = block_num;
+
     update_lib(block_num);
+
   }
 
   _currently_persisted_irreversible_block.store(0);
