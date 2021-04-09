@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2016 Steemit, Inc., and contributors.
- */
+* Copyright (c) 2016 Steemit, Inc., and contributors.
+*/
 #pragma once
 #include <hive/protocol/blockchain_configuration.hpp>
 
@@ -12,238 +12,243 @@ namespace hive{ namespace protocol { namespace blockchain_configuration{}}};
 namespace hpb_c =	hive::protocol::blockchain_configuration;
 
 #ifdef	IS_TEST_NET
-  #define HIVE_INIT_PRIVATE_KEY		hpb_c::hive_init_private_key.get()
-	/// Allows to limit number of total produced blocks.
-  #define TESTNET_BLOCK_LIMIT		hpb_c::testnet_block_limit.get()
+
+#define HIVE_INIT_PRIVATE_KEY		hpb_c::hive_init_private_key.get()
+/// Allows to limit number of total produced blocks.
+#define TESTNET_BLOCK_LIMIT		hpb_c::testnet_block_limit.get()
+
 #endif
 
-  #define HIVE_BLOCKCHAIN_VERSION		hpb_c::hive_blockchain_version.get()
-  #define HIVE_INIT_PUBLIC_KEY_STR		hpb_c::hive_init_public_key_str.get()
-  #define STEEM_CHAIN_ID		hpb_c::steem_chain_id.get()
-  #define HIVE_CHAIN_ID		hpb_c::def_hive_chain_id.get()
-  #define HIVE_ADDRESS_PREFIX		hpb_c::hive_address_prefix.get()
-  #define HIVE_GENESIS_TIME		hpb_c::hive_genesis_time.get()
-  #define HIVE_MINING_TIME		hpb_c::hive_mining_time.get()
-  #define HIVE_CASHOUT_WINDOW_SECONDS_PRE_HF12		hpb_c::hive_cashout_window_seconds_pre_hf12.get()
-  #define HIVE_CASHOUT_WINDOW_SECONDS_PRE_HF17		hpb_c::hive_cashout_window_seconds_pre_hf17.get()
-  #define HIVE_CASHOUT_WINDOW_SECONDS		hpb_c::hive_cashout_window_seconds.get()
-  #define HIVE_SECOND_CASHOUT_WINDOW		hpb_c::hive_second_cashout_window.get()
-  #define HIVE_MAX_CASHOUT_WINDOW_SECONDS		hpb_c::hive_max_cashout_window_seconds.get()
-  #define HIVE_UPVOTE_LOCKOUT_HF7		hpb_c::hive_upvote_lockout_hf7.get()
-  #define HIVE_UPVOTE_LOCKOUT_SECONDS		hpb_c::hive_upvote_lockout_seconds.get()
-  #define HIVE_UPVOTE_LOCKOUT_HF17		hpb_c::hive_upvote_lockout_hf17.get()
-  #define HIVE_MIN_ACCOUNT_CREATION_FEE		hpb_c::hive_min_account_creation_fee.get()
-  #define HIVE_MAX_ACCOUNT_CREATION_FEE		hpb_c::hive_max_account_creation_fee.get()
-  #define HIVE_OWNER_AUTH_RECOVERY_PERIOD		hpb_c::hive_owner_auth_recovery_period.get()
-  #define HIVE_ACCOUNT_RECOVERY_REQUEST_EXPIRATION_PERIOD		hpb_c::hive_account_recovery_request_expiration_period.get()
-  #define HIVE_OWNER_UPDATE_LIMIT		hpb_c::hive_owner_update_limit.get()
-  #define HIVE_OWNER_AUTH_HISTORY_TRACKING_START_BLOCK_NUM		hpb_c::hive_owner_auth_history_tracking_start_block_num.get()
-  #define HIVE_INIT_SUPPLY		hpb_c::hive_init_supply.get()
-  #define HIVE_HBD_INIT_SUPPLY		hpb_c::hive_hbd_init_supply.get()
-  #define HIVE_PROPOSAL_MAINTENANCE_PERIOD		hpb_c::hive_proposal_maintenance_period.get()
-  #define HIVE_PROPOSAL_MAINTENANCE_CLEANUP		hpb_c::hive_proposal_maintenance_cleanup.get()
-  #define HIVE_DAILY_PROPOSAL_MAINTENANCE_PERIOD		hpb_c::hive_daily_proposal_maintenance_period.get()
-  #define HIVE_GOVERNANCE_VOTE_EXPIRATION_PERIOD		hpb_c::hive_governance_vote_expiration_period.get()
-  #define HIVE_GLOBAL_REMOVE_THRESHOLD		hpb_c::hive_global_remove_threshold.get()
-  #define VESTS_SYMBOL		hpb_c::vests_symbol.get()
-  #define HIVE_SYMBOL		hpb_c::hive_symbol.get()
-  #define HBD_SYMBOL		hpb_c::hbd_symbol.get()
-  #define HIVE_BLOCKCHAIN_HARDFORK_VERSION		hpb_c::hive_blockchain_hardfork_version.get()
-  #define HIVE_100_PERCENT		hpb_c::hive_100_percent
-  #define HIVE_1_PERCENT		hpb_c::hive_1_percent
-  #define HIVE_1_BASIS_POINT		hpb_c::hive_1_basis_point
-  #define HIVE_BLOCK_INTERVAL		hpb_c::hive_block_interval
-  #define HIVE_BLOCKS_PER_YEAR		hpb_c::hive_blocks_per_year
-  #define HIVE_BLOCKS_PER_DAY		hpb_c::hive_blocks_per_day
-  #define HIVE_START_VESTING_BLOCK		hpb_c::hive_start_vesting_block.get()
-  #define HIVE_START_MINER_VOTING_BLOCK		hpb_c::hive_start_miner_voting_block.get()
-  #define HIVE_INIT_MINER_NAME		hpb_c::hive_init_miner_name.get()
-  #define HIVE_NUM_INIT_MINERS		hpb_c::hive_num_init_miners.get()
-  #define HIVE_INIT_TIME		hpb_c::hive_init_time.get()
-  #define HIVE_MAX_WITNESSES		hpb_c::hive_max_witnesses
-  #define HIVE_MAX_VOTED_WITNESSES_HF0		hpb_c::hive_max_voted_witnesses_hf0
-  #define HIVE_MAX_MINER_WITNESSES_HF0		hpb_c::hive_max_miner_witnesses_hf0
-  #define HIVE_MAX_RUNNER_WITNESSES_HF0		hpb_c::hive_max_runner_witnesses_hf0
-  #define HIVE_MAX_VOTED_WITNESSES_HF17		hpb_c::hive_max_voted_witnesses_hf17
-  #define HIVE_MAX_MINER_WITNESSES_HF17		hpb_c::hive_max_miner_witnesses_hf17
-  #define HIVE_MAX_RUNNER_WITNESSES_HF17		hpb_c::hive_max_runner_witnesses_hf17
-  #define HIVE_HARDFORK_REQUIRED_WITNESSES		hpb_c::hive_hardfork_required_witnesses.get()
-  #define HIVE_MAX_TIME_UNTIL_EXPIRATION		hpb_c::hive_max_time_until_expiration.get()
-  #define HIVE_MAX_MEMO_SIZE		hpb_c::hive_max_memo_size.get()
-  #define HIVE_MAX_PROXY_RECURSION_DEPTH		hpb_c::hive_max_proxy_recursion_depth
-  #define HIVE_VESTING_WITHDRAW_INTERVALS_PRE_HF_16		hpb_c::hive_vesting_withdraw_intervals_pre_hf_16.get()
-  #define HIVE_VESTING_WITHDRAW_INTERVALS		hpb_c::hive_vesting_withdraw_intervals.get()
-  #define HIVE_VESTING_WITHDRAW_INTERVAL_SECONDS		hpb_c::hive_vesting_withdraw_interval_seconds.get()
-  #define HIVE_MAX_WITHDRAW_ROUTES		hpb_c::hive_max_withdraw_routes.get()
-  #define HIVE_MAX_PENDING_TRANSFERS		hpb_c::hive_max_pending_transfers.get()
-  #define HIVE_SAVINGS_WITHDRAW_TIME		hpb_c::hive_savings_withdraw_time.get()
-  #define HIVE_SAVINGS_WITHDRAW_REQUEST_LIMIT		hpb_c::hive_savings_withdraw_request_limit.get()
-  #define HIVE_VOTING_MANA_REGENERATION_SECONDS		hpb_c::hive_voting_mana_regeneration_seconds
-  #define HIVE_MAX_VOTE_CHANGES		hpb_c::hive_max_vote_changes.get()
-  #define HIVE_REVERSE_AUCTION_WINDOW_SECONDS_HF6		hpb_c::hive_reverse_auction_window_seconds_hf6.get()
-  #define HIVE_REVERSE_AUCTION_WINDOW_SECONDS_HF20		hpb_c::hive_reverse_auction_window_seconds_hf20.get()
-  #define HIVE_REVERSE_AUCTION_WINDOW_SECONDS_HF21		hpb_c::hive_reverse_auction_window_seconds_hf21.get()
-  #define HIVE_EARLY_VOTING_SECONDS_HF25		hpb_c::hive_early_voting_seconds_hf25.get()
-  #define HIVE_MID_VOTING_SECONDS_HF25		hpb_c::hive_mid_voting_seconds_hf25.get()
-  #define HIVE_MIN_VOTE_INTERVAL_SEC		hpb_c::hive_min_vote_interval_sec.get()
-  #define HIVE_VOTE_DUST_THRESHOLD		hpb_c::hive_vote_dust_threshold.get()
-  #define HIVE_DOWNVOTE_POOL_PERCENT_HF21		hpb_c::hive_downvote_pool_percent_hf21.get()
-  #define HIVE_DELAYED_VOTING_TOTAL_INTERVAL_SECONDS		hpb_c::hive_delayed_voting_total_interval_seconds.get()
-  #define HIVE_DELAYED_VOTING_INTERVAL_SECONDS		hpb_c::hive_delayed_voting_interval_seconds.get()
-  #define HIVE_MIN_ROOT_COMMENT_INTERVAL		hpb_c::hive_min_root_comment_interval.get()
-  #define HIVE_MIN_REPLY_INTERVAL		hpb_c::hive_min_reply_interval.get()
-  #define HIVE_MIN_REPLY_INTERVAL_HF20		hpb_c::hive_min_reply_interval_hf20.get()
-  #define HIVE_MIN_COMMENT_EDIT_INTERVAL		hpb_c::hive_min_comment_edit_interval.get()
-  #define HIVE_POST_AVERAGE_WINDOW		hpb_c::hive_post_average_window.get()
-  #define HIVE_POST_WEIGHT_CONSTANT		hpb_c::hive_post_weight_constant.get()
-  #define HIVE_MAX_ACCOUNT_WITNESS_VOTES		hpb_c::hive_max_account_witness_votes.get()
-  #define HIVE_DEFAULT_HBD_INTEREST_RATE		hpb_c::hive_default_hbd_interest_rate.get()
-  #define HIVE_INFLATION_RATE_START_PERCENT		hpb_c::hive_inflation_rate_start_percent.get()
-  #define HIVE_INFLATION_RATE_STOP_PERCENT		hpb_c::hive_inflation_rate_stop_percent.get()
-  #define HIVE_INFLATION_NARROWING_PERIOD		hpb_c::hive_inflation_narrowing_period.get()
-  #define HIVE_CONTENT_REWARD_PERCENT_HF16		hpb_c::hive_content_reward_percent_hf16.get()
-  #define HIVE_VESTING_FUND_PERCENT_HF16		hpb_c::hive_vesting_fund_percent_hf16.get()
-  #define HIVE_PROPOSAL_FUND_PERCENT_HF0		hpb_c::hive_proposal_fund_percent_hf0.get()
-  #define HIVE_CONTENT_REWARD_PERCENT_HF21		hpb_c::hive_content_reward_percent_hf21.get()
-  #define HIVE_PROPOSAL_FUND_PERCENT_HF21		hpb_c::hive_proposal_fund_percent_hf21.get()
-  #define HIVE_HF21_CONVERGENT_LINEAR_RECENT_CLAIMS		hpb_c::hive_hf21_convergent_linear_recent_claims.get()
-  #define HIVE_CONTENT_CONSTANT_HF21		hpb_c::hive_content_constant_hf21.get()
-  #define HIVE_MINER_PAY_PERCENT		hpb_c::hive_miner_pay_percent.get()
-  #define HIVE_MAX_RATION_DECAY_RATE		hpb_c::hive_max_ration_decay_rate.get()
-  #define HIVE_BANDWIDTH_AVERAGE_WINDOW_SECONDS		hpb_c::hive_bandwidth_average_window_seconds.get()
-  #define HIVE_BANDWIDTH_PRECISION		hpb_c::hive_bandwidth_precision.get()
-  #define HIVE_MAX_COMMENT_DEPTH_PRE_HF17		hpb_c::hive_max_comment_depth_pre_hf17.get()
-  #define HIVE_MAX_COMMENT_DEPTH		hpb_c::hive_max_comment_depth.get()
-  #define HIVE_SOFT_MAX_COMMENT_DEPTH		hpb_c::hive_soft_max_comment_depth.get()
-  #define HIVE_MAX_RESERVE_RATIO		hpb_c::hive_max_reserve_ratio.get()
-  #define HIVE_CREATE_ACCOUNT_WITH_HIVE_MODIFIER		hpb_c::hive_create_account_with_hive_modifier.get()
-  #define HIVE_CREATE_ACCOUNT_DELEGATION_RATIO		hpb_c::hive_create_account_delegation_ratio.get()
-  #define HIVE_CREATE_ACCOUNT_DELEGATION_TIME		hpb_c::hive_create_account_delegation_time.get()
-  #define HIVE_MINING_REWARD		hpb_c::hive_mining_reward.get()
-  #define HIVE_EQUIHASH_N		hpb_c::hive_equihash_n.get()
-  #define HIVE_EQUIHASH_K		hpb_c::hive_equihash_k.get()
-  #define HIVE_LIQUIDITY_TIMEOUT_SEC		hpb_c::hive_liquidity_timeout_sec.get()
-  #define HIVE_MIN_LIQUIDITY_REWARD_PERIOD_SEC		hpb_c::hive_min_liquidity_reward_period_sec.get()
-  #define HIVE_LIQUIDITY_REWARD_PERIOD_SEC		hpb_c::hive_liquidity_reward_period_sec
-  #define HIVE_LIQUIDITY_REWARD_BLOCKS		hpb_c::hive_liquidity_reward_blocks.get()
-  #define HIVE_MIN_LIQUIDITY_REWARD		hpb_c::hive_min_liquidity_reward.get()
-  #define HIVE_MIN_CONTENT_REWARD		hpb_c::hive_min_content_reward.get()
-  #define HIVE_MIN_CURATE_REWARD		hpb_c::hive_min_curate_reward.get()
-  #define HIVE_MIN_PRODUCER_REWARD		hpb_c::hive_min_producer_reward.get()
-  #define HIVE_MIN_POW_REWARD		hpb_c::hive_min_pow_reward.get()
-  #define HIVE_ACTIVE_CHALLENGE_FEE		hpb_c::hive_active_challenge_fee.get()
-  #define HIVE_OWNER_CHALLENGE_FEE		hpb_c::hive_owner_challenge_fee.get()
-  #define HIVE_ACTIVE_CHALLENGE_COOLDOWN		hpb_c::hive_active_challenge_cooldown.get()
-  #define HIVE_OWNER_CHALLENGE_COOLDOWN		hpb_c::hive_owner_challenge_cooldown.get()
-  #define HIVE_POST_REWARD_FUND_NAME		hpb_c::hive_post_reward_fund_name.get()
-  #define HIVE_COMMENT_REWARD_FUND_NAME		hpb_c::hive_comment_reward_fund_name.get()
-  #define HIVE_RECENT_RSHARES_DECAY_TIME_HF17		hpb_c::hive_recent_rshares_decay_time_hf17.get()
-  #define HIVE_RECENT_RSHARES_DECAY_TIME_HF19		hpb_c::hive_recent_rshares_decay_time_hf19.get()
-  #define HIVE_CONTENT_CONSTANT_HF0		hpb_c::hive_content_constant_hf0.get()
-  #define HIVE_APR_PERCENT_MULTIPLY_PER_BLOCK		hpb_c::hive_apr_percent_multiply_per_block
-  #define HIVE_APR_PERCENT_SHIFT_PER_BLOCK		hpb_c::hive_apr_percent_shift_per_block
-  #define HIVE_APR_PERCENT_MULTIPLY_PER_ROUND		hpb_c::hive_apr_percent_multiply_per_round
-  #define HIVE_APR_PERCENT_SHIFT_PER_ROUND		hpb_c::hive_apr_percent_shift_per_round
-  #define HIVE_APR_PERCENT_MULTIPLY_PER_HOUR		hpb_c::hive_apr_percent_multiply_per_hour
-  #define HIVE_APR_PERCENT_SHIFT_PER_HOUR		hpb_c::hive_apr_percent_shift_per_hour
-  #define HIVE_CURATE_APR_PERCENT		hpb_c::hive_curate_apr_percent
-  #define HIVE_CONTENT_APR_PERCENT		hpb_c::hive_content_apr_percent
-  #define HIVE_LIQUIDITY_APR_PERCENT		hpb_c::hive_liquidity_apr_percent
-  #define HIVE_PRODUCER_APR_PERCENT		hpb_c::hive_producer_apr_percent
-  #define HIVE_POW_APR_PERCENT		hpb_c::hive_pow_apr_percent
-  #define HIVE_MIN_PAYOUT_HBD		hpb_c::hive_min_payout_hbd.get()
-  #define HIVE_HBD_STOP_PERCENT_HF14		hpb_c::hive_hbd_stop_percent_hf14.get()
-  #define HIVE_HBD_STOP_PERCENT_HF20		hpb_c::hive_hbd_stop_percent_hf20.get()
-  #define HIVE_HBD_START_PERCENT_HF14		hpb_c::hive_hbd_start_percent_hf14.get()
-  #define HIVE_HBD_START_PERCENT_HF20		hpb_c::hive_hbd_start_percent_hf20.get()
-  #define HIVE_MIN_ACCOUNT_NAME_LENGTH		hpb_c::hive_min_account_name_length
-  #define HIVE_MAX_ACCOUNT_NAME_LENGTH		hpb_c::hive_max_account_name_length.get()
-  #define HIVE_MIN_PERMLINK_LENGTH		hpb_c::hive_min_permlink_length.get()
-  #define HIVE_MAX_PERMLINK_LENGTH		hpb_c::hive_max_permlink_length.get()
-  #define HIVE_MAX_WITNESS_URL_LENGTH		hpb_c::hive_max_witness_url_length.get()
-  #define HIVE_MAX_SHARE_SUPPLY		hpb_c::hive_max_share_supply.get()
-  #define HIVE_MAX_SATOSHIS		hpb_c::hive_max_satoshis.get()
-  #define HIVE_MAX_SIG_CHECK_DEPTH		hpb_c::hive_max_sig_check_depth.get()
-  #define HIVE_MAX_SIG_CHECK_ACCOUNTS		hpb_c::hive_max_sig_check_accounts.get()
-  #define HIVE_MIN_TRANSACTION_SIZE_LIMIT		hpb_c::hive_min_transaction_size_limit.get()
-  #define HIVE_SECONDS_PER_YEAR		hpb_c::hive_seconds_per_year.get()
-  #define HIVE_HBD_INTEREST_COMPOUND_INTERVAL_SEC		hpb_c::hive_hbd_interest_compound_interval_sec.get()
-  #define HIVE_MAX_TRANSACTION_SIZE		hpb_c::hive_max_transaction_size.get()
-  #define HIVE_MIN_BLOCK_SIZE_LIMIT		hpb_c::hive_min_block_size_limit.get()
-  #define HIVE_MAX_BLOCK_SIZE		hpb_c::hive_max_block_size.get()
-  #define HIVE_SOFT_MAX_BLOCK_SIZE		hpb_c::hive_soft_max_block_size.get()
-  #define HIVE_MIN_BLOCK_SIZE		hpb_c::hive_min_block_size.get()
-  #define HIVE_BLOCKS_PER_HOUR		hpb_c::hive_blocks_per_hour.get()
-  #define HIVE_FEED_INTERVAL_BLOCKS		hpb_c::hive_feed_interval_blocks.get()
-  #define HIVE_FEED_HISTORY_WINDOW_PRE_HF_16		hpb_c::hive_feed_history_window_pre_hf_16.get()
-  #define HIVE_FEED_HISTORY_WINDOW		hpb_c::def_hive_feed_history_window.get()
-  #define HIVE_MAX_FEED_AGE_SECONDS		hpb_c::hive_max_feed_age_seconds.get()
-  #define HIVE_MIN_FEEDS		hpb_c::hive_min_feeds.get()
-  #define HIVE_CONVERSION_DELAY_PRE_HF_16		hpb_c::hive_conversion_delay_pre_hf_16.get()
-  #define HIVE_CONVERSION_DELAY		hpb_c::def_hive_conversion_delay.get()
-  #define HIVE_MIN_UNDO_HISTORY		hpb_c::hive_min_undo_history.get()
-  #define HIVE_MAX_UNDO_HISTORY		hpb_c::hive_max_undo_history.get()
-  #define HIVE_MIN_TRANSACTION_EXPIRATION_LIMIT		hpb_c::hive_min_transaction_expiration_limit.get()
-  #define HIVE_BLOCKCHAIN_PRECISION		hpb_c::hive_blockchain_precision.get()
-  #define HIVE_BLOCKCHAIN_PRECISION_DIGITS		hpb_c::hive_blockchain_precision_digits.get()
-  #define HIVE_MAX_INSTANCE_ID		hpb_c::hive_max_instance_id.get()
-  #define HIVE_MAX_AUTHORITY_MEMBERSHIP		hpb_c::hive_max_authority_membership.get()
-  #define HIVE_MAX_ASSET_WHITELIST_AUTHORITIES		hpb_c::hive_max_asset_whitelist_authorities.get()
-  #define HIVE_MAX_URL_LENGTH		hpb_c::hive_max_url_length.get()
-  #define HIVE_IRREVERSIBLE_THRESHOLD		hpb_c::hive_irreversible_threshold
-  #define HIVE_VIRTUAL_SCHEDULE_LAP_LENGTH		hpb_c::hive_virtual_schedule_lap_length.get()
-  #define HIVE_VIRTUAL_SCHEDULE_LAP_LENGTH2		hpb_c::hive_virtual_schedule_lap_length2.get()
-  #define HIVE_INITIAL_VOTE_POWER_RATE		hpb_c::hive_initial_vote_power_rate.get()
-  #define HIVE_REDUCED_VOTE_POWER_RATE		hpb_c::hive_reduced_vote_power_rate.get()
-  #define HIVE_MAX_LIMIT_ORDER_EXPIRATION		hpb_c::hive_max_limit_order_expiration.get()
-  #define HIVE_DELEGATION_RETURN_PERIOD_HF0		hpb_c::hive_delegation_return_period_hf0.get()
-  #define HIVE_DELEGATION_RETURN_PERIOD_HF20		hpb_c::hive_delegation_return_period_hf20.get()
-  #define HIVE_RD_MIN_DECAY_BITS		hpb_c::hive_rd_min_decay_bits
-  #define HIVE_RD_MAX_DECAY_BITS		hpb_c::hive_rd_max_decay_bits.get()
-  #define HIVE_RD_DECAY_DENOM_SHIFT		hpb_c::hive_rd_decay_denom_shift
-  #define HIVE_RD_MAX_POOL_BITS		hpb_c::hive_rd_max_pool_bits
-  #define HIVE_RD_MAX_BUDGET_1		hpb_c::hive_rd_max_budget_1
-  #define HIVE_RD_MAX_BUDGET_2		hpb_c::hive_rd_max_budget_2
-  #define HIVE_RD_MAX_BUDGET_3		hpb_c::hive_rd_max_budget_3
-  #define HIVE_RD_MAX_BUDGET		hpb_c::hive_rd_max_budget
-  #define HIVE_RD_MIN_DECAY		hpb_c::hive_rd_min_decay.get()
-  #define HIVE_RD_MIN_BUDGET		hpb_c::hive_rd_min_budget.get()
-  #define HIVE_RD_MAX_DECAY		hpb_c::hive_rd_max_decay.get()
-  #define HIVE_ACCOUNT_SUBSIDY_PRECISION		hpb_c::hive_account_subsidy_precision.get()
-  #define HIVE_WITNESS_SUBSIDY_BUDGET_PERCENT		hpb_c::hive_witness_subsidy_budget_percent.get()
-  #define HIVE_WITNESS_SUBSIDY_DECAY_PERCENT		hpb_c::hive_witness_subsidy_decay_percent.get()
-  #define HIVE_DEFAULT_ACCOUNT_SUBSIDY_DECAY		hpb_c::hive_default_account_subsidy_decay.get()
-  #define HIVE_DEFAULT_ACCOUNT_SUBSIDY_BUDGET		hpb_c::hive_default_account_subsidy_budget.get()
-  #define HIVE_DECAY_BACKSTOP_PERCENT		hpb_c::hive_decay_backstop_percent.get()
-  #define HIVE_BLOCK_GENERATION_POSTPONED_TX_LIMIT		hpb_c::hive_block_generation_postponed_tx_limit.get()
-  #define HIVE_PENDING_TRANSACTION_EXECUTION_LIMIT		hpb_c::hive_pending_transaction_execution_limit.get()
-  #define HIVE_CUSTOM_OP_ID_MAX_LENGTH		hpb_c::hive_custom_op_id_max_length.get()
-  #define HIVE_CUSTOM_OP_DATA_MAX_LENGTH		hpb_c::hive_custom_op_data_max_length.get()
-  #define HIVE_BENEFICIARY_LIMIT		hpb_c::hive_beneficiary_limit.get()
-  #define HIVE_COMMENT_TITLE_LIMIT		hpb_c::hive_comment_title_limit.get()
-  #define HIVE_ONE_DAY_SECONDS		hpb_c::hive_one_day_seconds.get()
-  #define HIVE_MINER_ACCOUNT		hpb_c::hive_miner_account.get()
-  #define HIVE_NULL_ACCOUNT		hpb_c::hive_null_account.get()
-  #define HIVE_TEMP_ACCOUNT		hpb_c::hive_temp_account.get()
-  #define HIVE_PROXY_TO_SELF_ACCOUNT		hpb_c::hive_proxy_to_self_account.get()
-  #define HIVE_ROOT_POST_PARENT		hpb_c::hive_root_post_parent.get()
-  #define OBSOLETE_TREASURY_ACCOUNT		hpb_c::obsolete_treasury_account.get()
-  #define NEW_HIVE_TREASURY_ACCOUNT		hpb_c::new_hive_treasury_account.get()
-  #define HIVE_TREASURY_FEE		hpb_c::hive_treasury_fee.get()
-  #define HIVE_PROPOSAL_SUBJECT_MAX_LENGTH		hpb_c::hive_proposal_subject_max_length.get()
-  #define HIVE_PROPOSAL_MAX_IDS_NUMBER		hpb_c::hive_proposal_max_ids_number.get()
-  #define HIVE_PROPOSAL_FEE_INCREASE_DAYS		hpb_c::hive_proposal_fee_increase_days.get()
-  #define HIVE_PROPOSAL_FEE_INCREASE_DAYS_SEC		hpb_c::hive_proposal_fee_increase_days_sec.get()
-  #define HIVE_PROPOSAL_FEE_INCREASE_AMOUNT		hpb_c::hive_proposal_fee_increase_amount.get()
-  #define HIVE_PROPOSAL_CONVERSION_RATE		hpb_c::hive_proposal_conversion_rate.get()
+#define HIVE_BLOCKCHAIN_VERSION		hpb_c::hive_blockchain_version.get()
+#define HIVE_INIT_PUBLIC_KEY_STR		hpb_c::hive_init_public_key_str.get()
+#define STEEM_CHAIN_ID		hpb_c::steem_chain_id.get()
+#define HIVE_CHAIN_ID		hpb_c::def_hive_chain_id.get()
+#define HIVE_ADDRESS_PREFIX		hpb_c::hive_address_prefix.get()
+#define HIVE_GENESIS_TIME		hpb_c::hive_genesis_time.get()
+#define HIVE_MINING_TIME		hpb_c::hive_mining_time.get()
+#define HIVE_CASHOUT_WINDOW_SECONDS_PRE_HF12		hpb_c::hive_cashout_window_seconds_pre_hf12.get()
+#define HIVE_CASHOUT_WINDOW_SECONDS_PRE_HF17		hpb_c::hive_cashout_window_seconds_pre_hf17.get()
+#define HIVE_CASHOUT_WINDOW_SECONDS		hpb_c::hive_cashout_window_seconds.get()
+#define HIVE_SECOND_CASHOUT_WINDOW		hpb_c::hive_second_cashout_window.get()
+#define HIVE_MAX_CASHOUT_WINDOW_SECONDS		hpb_c::hive_max_cashout_window_seconds.get()
+#define HIVE_UPVOTE_LOCKOUT_HF7		hpb_c::hive_upvote_lockout_hf7.get()
+#define HIVE_UPVOTE_LOCKOUT_SECONDS		hpb_c::hive_upvote_lockout_seconds.get()
+#define HIVE_UPVOTE_LOCKOUT_HF17		hpb_c::hive_upvote_lockout_hf17.get()
+#define HIVE_MIN_ACCOUNT_CREATION_FEE		hpb_c::hive_min_account_creation_fee.get()
+#define HIVE_MAX_ACCOUNT_CREATION_FEE		hpb_c::hive_max_account_creation_fee.get()
+#define HIVE_OWNER_AUTH_RECOVERY_PERIOD		hpb_c::hive_owner_auth_recovery_period.get()
+#define HIVE_ACCOUNT_RECOVERY_REQUEST_EXPIRATION_PERIOD		hpb_c::hive_account_recovery_request_expiration_period.get()
+#define HIVE_OWNER_UPDATE_LIMIT		hpb_c::hive_owner_update_limit.get()
+#define HIVE_OWNER_AUTH_HISTORY_TRACKING_START_BLOCK_NUM		hpb_c::hive_owner_auth_history_tracking_start_block_num.get()
+#define HIVE_INIT_SUPPLY		hpb_c::hive_init_supply.get()
+#define HIVE_HBD_INIT_SUPPLY		hpb_c::hive_hbd_init_supply.get()
+#define HIVE_PROPOSAL_MAINTENANCE_PERIOD		hpb_c::hive_proposal_maintenance_period.get()
+#define HIVE_PROPOSAL_MAINTENANCE_CLEANUP		hpb_c::hive_proposal_maintenance_cleanup.get()
+#define HIVE_DAILY_PROPOSAL_MAINTENANCE_PERIOD		hpb_c::hive_daily_proposal_maintenance_period.get()
+#define HIVE_GOVERNANCE_VOTE_EXPIRATION_PERIOD		hpb_c::hive_governance_vote_expiration_period.get()
+#define HIVE_GLOBAL_REMOVE_THRESHOLD		hpb_c::hive_global_remove_threshold.get()
+#define VESTS_SYMBOL		hpb_c::vests_symbol.get()
+#define HIVE_SYMBOL		hpb_c::hive_symbol.get()
+#define HBD_SYMBOL		hpb_c::hbd_symbol.get()
+#define HIVE_BLOCKCHAIN_HARDFORK_VERSION		hpb_c::hive_blockchain_hardfork_version.get()
+#define HIVE_100_PERCENT		hpb_c::hive_100_percent
+#define HIVE_1_PERCENT		hpb_c::hive_1_percent
+#define HIVE_1_BASIS_POINT		hpb_c::hive_1_basis_point
+#define HIVE_BLOCK_INTERVAL		hpb_c::hive_block_interval
+#define HIVE_BLOCKS_PER_YEAR		hpb_c::hive_blocks_per_year
+#define HIVE_BLOCKS_PER_DAY		hpb_c::hive_blocks_per_day
+#define HIVE_START_VESTING_BLOCK		hpb_c::hive_start_vesting_block.get()
+#define HIVE_START_MINER_VOTING_BLOCK		hpb_c::hive_start_miner_voting_block.get()
+#define HIVE_INIT_MINER_NAME		hpb_c::hive_init_miner_name.get()
+#define HIVE_NUM_INIT_MINERS		hpb_c::hive_num_init_miners.get()
+#define HIVE_INIT_TIME		hpb_c::hive_init_time.get()
+#define HIVE_MAX_WITNESSES		hpb_c::hive_max_witnesses
+#define HIVE_MAX_VOTED_WITNESSES_HF0		hpb_c::hive_max_voted_witnesses_hf0
+#define HIVE_MAX_MINER_WITNESSES_HF0		hpb_c::hive_max_miner_witnesses_hf0
+#define HIVE_MAX_RUNNER_WITNESSES_HF0		hpb_c::hive_max_runner_witnesses_hf0
+#define HIVE_MAX_VOTED_WITNESSES_HF17		hpb_c::hive_max_voted_witnesses_hf17
+#define HIVE_MAX_MINER_WITNESSES_HF17		hpb_c::hive_max_miner_witnesses_hf17
+#define HIVE_MAX_RUNNER_WITNESSES_HF17		hpb_c::hive_max_runner_witnesses_hf17
+#define HIVE_HARDFORK_REQUIRED_WITNESSES		hpb_c::hive_hardfork_required_witnesses.get()
+#define HIVE_MAX_TIME_UNTIL_EXPIRATION		hpb_c::hive_max_time_until_expiration.get()
+#define HIVE_MAX_MEMO_SIZE		hpb_c::hive_max_memo_size.get()
+#define HIVE_MAX_PROXY_RECURSION_DEPTH		hpb_c::hive_max_proxy_recursion_depth
+#define HIVE_VESTING_WITHDRAW_INTERVALS_PRE_HF_16		hpb_c::hive_vesting_withdraw_intervals_pre_hf_16.get()
+#define HIVE_VESTING_WITHDRAW_INTERVALS		hpb_c::hive_vesting_withdraw_intervals.get()
+#define HIVE_VESTING_WITHDRAW_INTERVAL_SECONDS		hpb_c::hive_vesting_withdraw_interval_seconds.get()
+#define HIVE_MAX_WITHDRAW_ROUTES		hpb_c::hive_max_withdraw_routes.get()
+#define HIVE_MAX_PENDING_TRANSFERS		hpb_c::hive_max_pending_transfers.get()
+#define HIVE_SAVINGS_WITHDRAW_TIME		hpb_c::hive_savings_withdraw_time.get()
+#define HIVE_SAVINGS_WITHDRAW_REQUEST_LIMIT		hpb_c::hive_savings_withdraw_request_limit.get()
+#define HIVE_VOTING_MANA_REGENERATION_SECONDS		hpb_c::hive_voting_mana_regeneration_seconds
+#define HIVE_MAX_VOTE_CHANGES		hpb_c::hive_max_vote_changes.get()
+#define HIVE_REVERSE_AUCTION_WINDOW_SECONDS_HF6		hpb_c::hive_reverse_auction_window_seconds_hf6.get()
+#define HIVE_REVERSE_AUCTION_WINDOW_SECONDS_HF20		hpb_c::hive_reverse_auction_window_seconds_hf20.get()
+#define HIVE_REVERSE_AUCTION_WINDOW_SECONDS_HF21		hpb_c::hive_reverse_auction_window_seconds_hf21.get()
+#define HIVE_EARLY_VOTING_SECONDS_HF25		hpb_c::hive_early_voting_seconds_hf25.get()
+#define HIVE_MID_VOTING_SECONDS_HF25		hpb_c::hive_mid_voting_seconds_hf25.get()
+#define HIVE_MIN_VOTE_INTERVAL_SEC		hpb_c::hive_min_vote_interval_sec.get()
+#define HIVE_VOTE_DUST_THRESHOLD		hpb_c::hive_vote_dust_threshold.get()
+#define HIVE_DOWNVOTE_POOL_PERCENT_HF21		hpb_c::hive_downvote_pool_percent_hf21.get()
+#define HIVE_DELAYED_VOTING_TOTAL_INTERVAL_SECONDS		hpb_c::hive_delayed_voting_total_interval_seconds.get()
+#define HIVE_DELAYED_VOTING_INTERVAL_SECONDS		hpb_c::hive_delayed_voting_interval_seconds.get()
+#define HIVE_MIN_ROOT_COMMENT_INTERVAL		hpb_c::hive_min_root_comment_interval.get()
+#define HIVE_MIN_REPLY_INTERVAL		hpb_c::hive_min_reply_interval.get()
+#define HIVE_MIN_REPLY_INTERVAL_HF20		hpb_c::hive_min_reply_interval_hf20.get()
+#define HIVE_MIN_COMMENT_EDIT_INTERVAL		hpb_c::hive_min_comment_edit_interval.get()
+#define HIVE_POST_AVERAGE_WINDOW		hpb_c::hive_post_average_window.get()
+#define HIVE_POST_WEIGHT_CONSTANT		hpb_c::hive_post_weight_constant.get()
+#define HIVE_MAX_ACCOUNT_WITNESS_VOTES		hpb_c::hive_max_account_witness_votes.get()
+#define HIVE_DEFAULT_HBD_INTEREST_RATE		hpb_c::hive_default_hbd_interest_rate.get()
+#define HIVE_INFLATION_RATE_START_PERCENT		hpb_c::hive_inflation_rate_start_percent.get()
+#define HIVE_INFLATION_RATE_STOP_PERCENT		hpb_c::hive_inflation_rate_stop_percent.get()
+#define HIVE_INFLATION_NARROWING_PERIOD		hpb_c::hive_inflation_narrowing_period.get()
+#define HIVE_CONTENT_REWARD_PERCENT_HF16		hpb_c::hive_content_reward_percent_hf16.get()
+#define HIVE_VESTING_FUND_PERCENT_HF16		hpb_c::hive_vesting_fund_percent_hf16.get()
+#define HIVE_PROPOSAL_FUND_PERCENT_HF0		hpb_c::hive_proposal_fund_percent_hf0.get()
+#define HIVE_CONTENT_REWARD_PERCENT_HF21		hpb_c::hive_content_reward_percent_hf21.get()
+#define HIVE_PROPOSAL_FUND_PERCENT_HF21		hpb_c::hive_proposal_fund_percent_hf21.get()
+#define HIVE_HF21_CONVERGENT_LINEAR_RECENT_CLAIMS		hpb_c::hive_hf21_convergent_linear_recent_claims.get()
+#define HIVE_CONTENT_CONSTANT_HF21		hpb_c::hive_content_constant_hf21.get()
+#define HIVE_MINER_PAY_PERCENT		hpb_c::hive_miner_pay_percent.get()
+#define HIVE_MAX_RATION_DECAY_RATE		hpb_c::hive_max_ration_decay_rate.get()
+#define HIVE_BANDWIDTH_AVERAGE_WINDOW_SECONDS		hpb_c::hive_bandwidth_average_window_seconds.get()
+#define HIVE_BANDWIDTH_PRECISION		hpb_c::hive_bandwidth_precision.get()
+#define HIVE_MAX_COMMENT_DEPTH_PRE_HF17		hpb_c::hive_max_comment_depth_pre_hf17.get()
+#define HIVE_MAX_COMMENT_DEPTH		hpb_c::hive_max_comment_depth.get()
+#define HIVE_SOFT_MAX_COMMENT_DEPTH		hpb_c::hive_soft_max_comment_depth.get()
+#define HIVE_MAX_RESERVE_RATIO		hpb_c::hive_max_reserve_ratio.get()
+#define HIVE_CREATE_ACCOUNT_WITH_HIVE_MODIFIER		hpb_c::hive_create_account_with_hive_modifier.get()
+#define HIVE_CREATE_ACCOUNT_DELEGATION_RATIO		hpb_c::hive_create_account_delegation_ratio.get()
+#define HIVE_CREATE_ACCOUNT_DELEGATION_TIME		hpb_c::hive_create_account_delegation_time.get()
+#define HIVE_MINING_REWARD		hpb_c::hive_mining_reward.get()
+#define HIVE_EQUIHASH_N		hpb_c::hive_equihash_n.get()
+#define HIVE_EQUIHASH_K		hpb_c::hive_equihash_k.get()
+#define HIVE_LIQUIDITY_TIMEOUT_SEC		hpb_c::hive_liquidity_timeout_sec.get()
+#define HIVE_MIN_LIQUIDITY_REWARD_PERIOD_SEC		hpb_c::hive_min_liquidity_reward_period_sec.get()
+#define HIVE_LIQUIDITY_REWARD_PERIOD_SEC		hpb_c::hive_liquidity_reward_period_sec
+#define HIVE_LIQUIDITY_REWARD_BLOCKS		hpb_c::hive_liquidity_reward_blocks.get()
+#define HIVE_MIN_LIQUIDITY_REWARD		hpb_c::hive_min_liquidity_reward.get()
+#define HIVE_MIN_CONTENT_REWARD		hpb_c::hive_min_content_reward.get()
+#define HIVE_MIN_CURATE_REWARD		hpb_c::hive_min_curate_reward.get()
+#define HIVE_MIN_PRODUCER_REWARD		hpb_c::hive_min_producer_reward.get()
+#define HIVE_MIN_POW_REWARD		hpb_c::hive_min_pow_reward.get()
+#define HIVE_ACTIVE_CHALLENGE_FEE		hpb_c::hive_active_challenge_fee.get()
+#define HIVE_OWNER_CHALLENGE_FEE		hpb_c::hive_owner_challenge_fee.get()
+#define HIVE_ACTIVE_CHALLENGE_COOLDOWN		hpb_c::hive_active_challenge_cooldown.get()
+#define HIVE_OWNER_CHALLENGE_COOLDOWN		hpb_c::hive_owner_challenge_cooldown.get()
+#define HIVE_POST_REWARD_FUND_NAME		hpb_c::hive_post_reward_fund_name.get()
+#define HIVE_COMMENT_REWARD_FUND_NAME		hpb_c::hive_comment_reward_fund_name.get()
+#define HIVE_RECENT_RSHARES_DECAY_TIME_HF17		hpb_c::hive_recent_rshares_decay_time_hf17.get()
+#define HIVE_RECENT_RSHARES_DECAY_TIME_HF19		hpb_c::hive_recent_rshares_decay_time_hf19.get()
+#define HIVE_CONTENT_CONSTANT_HF0		hpb_c::hive_content_constant_hf0.get()
+#define HIVE_APR_PERCENT_MULTIPLY_PER_BLOCK		hpb_c::hive_apr_percent_multiply_per_block
+#define HIVE_APR_PERCENT_SHIFT_PER_BLOCK		hpb_c::hive_apr_percent_shift_per_block
+#define HIVE_APR_PERCENT_MULTIPLY_PER_ROUND		hpb_c::hive_apr_percent_multiply_per_round
+#define HIVE_APR_PERCENT_SHIFT_PER_ROUND		hpb_c::hive_apr_percent_shift_per_round
+#define HIVE_APR_PERCENT_MULTIPLY_PER_HOUR		hpb_c::hive_apr_percent_multiply_per_hour
+#define HIVE_APR_PERCENT_SHIFT_PER_HOUR		hpb_c::hive_apr_percent_shift_per_hour
+#define HIVE_CURATE_APR_PERCENT		hpb_c::hive_curate_apr_percent
+#define HIVE_CONTENT_APR_PERCENT		hpb_c::hive_content_apr_percent
+#define HIVE_LIQUIDITY_APR_PERCENT		hpb_c::hive_liquidity_apr_percent
+#define HIVE_PRODUCER_APR_PERCENT		hpb_c::hive_producer_apr_percent
+#define HIVE_POW_APR_PERCENT		hpb_c::hive_pow_apr_percent
+#define HIVE_MIN_PAYOUT_HBD		hpb_c::hive_min_payout_hbd.get()
+#define HIVE_HBD_STOP_PERCENT_HF14		hpb_c::hive_hbd_stop_percent_hf14.get()
+#define HIVE_HBD_STOP_PERCENT_HF20		hpb_c::hive_hbd_stop_percent_hf20.get()
+#define HIVE_HBD_START_PERCENT_HF14		hpb_c::hive_hbd_start_percent_hf14.get()
+#define HIVE_HBD_START_PERCENT_HF20		hpb_c::hive_hbd_start_percent_hf20.get()
+#define HIVE_MIN_ACCOUNT_NAME_LENGTH		hpb_c::hive_min_account_name_length
+#define HIVE_MAX_ACCOUNT_NAME_LENGTH		hpb_c::hive_max_account_name_length.get()
+#define HIVE_MIN_PERMLINK_LENGTH		hpb_c::hive_min_permlink_length.get()
+#define HIVE_MAX_PERMLINK_LENGTH		hpb_c::hive_max_permlink_length.get()
+#define HIVE_MAX_WITNESS_URL_LENGTH		hpb_c::hive_max_witness_url_length.get()
+#define HIVE_MAX_SHARE_SUPPLY		hpb_c::hive_max_share_supply.get()
+#define HIVE_MAX_SATOSHIS		hpb_c::hive_max_satoshis.get()
+#define HIVE_MAX_SIG_CHECK_DEPTH		hpb_c::hive_max_sig_check_depth.get()
+#define HIVE_MAX_SIG_CHECK_ACCOUNTS		hpb_c::hive_max_sig_check_accounts.get()
+#define HIVE_MIN_TRANSACTION_SIZE_LIMIT		hpb_c::hive_min_transaction_size_limit.get()
+#define HIVE_SECONDS_PER_YEAR		hpb_c::hive_seconds_per_year.get()
+#define HIVE_HBD_INTEREST_COMPOUND_INTERVAL_SEC		hpb_c::hive_hbd_interest_compound_interval_sec.get()
+#define HIVE_MAX_TRANSACTION_SIZE		hpb_c::hive_max_transaction_size.get()
+#define HIVE_MIN_BLOCK_SIZE_LIMIT		hpb_c::hive_min_block_size_limit.get()
+#define HIVE_MAX_BLOCK_SIZE		hpb_c::hive_max_block_size.get()
+#define HIVE_SOFT_MAX_BLOCK_SIZE		hpb_c::hive_soft_max_block_size.get()
+#define HIVE_MIN_BLOCK_SIZE		hpb_c::hive_min_block_size.get()
+#define HIVE_BLOCKS_PER_HOUR		hpb_c::hive_blocks_per_hour.get()
+#define HIVE_FEED_INTERVAL_BLOCKS		hpb_c::hive_feed_interval_blocks.get()
+#define HIVE_FEED_HISTORY_WINDOW_PRE_HF_16		hpb_c::hive_feed_history_window_pre_hf_16.get()
+#define HIVE_FEED_HISTORY_WINDOW		hpb_c::def_hive_feed_history_window.get()
+#define HIVE_MAX_FEED_AGE_SECONDS		hpb_c::hive_max_feed_age_seconds.get()
+#define HIVE_MIN_FEEDS		hpb_c::hive_min_feeds.get()
+#define HIVE_CONVERSION_DELAY_PRE_HF_16		hpb_c::hive_conversion_delay_pre_hf_16.get()
+#define HIVE_CONVERSION_DELAY		hpb_c::def_hive_conversion_delay.get()
+#define HIVE_MIN_UNDO_HISTORY		hpb_c::hive_min_undo_history.get()
+#define HIVE_MAX_UNDO_HISTORY		hpb_c::hive_max_undo_history.get()
+#define HIVE_MIN_TRANSACTION_EXPIRATION_LIMIT		hpb_c::hive_min_transaction_expiration_limit.get()
+#define HIVE_BLOCKCHAIN_PRECISION		hpb_c::hive_blockchain_precision.get()
+#define HIVE_BLOCKCHAIN_PRECISION_DIGITS		hpb_c::hive_blockchain_precision_digits.get()
+#define HIVE_MAX_INSTANCE_ID		hpb_c::hive_max_instance_id.get()
+#define HIVE_MAX_AUTHORITY_MEMBERSHIP		hpb_c::hive_max_authority_membership.get()
+#define HIVE_MAX_ASSET_WHITELIST_AUTHORITIES		hpb_c::hive_max_asset_whitelist_authorities.get()
+#define HIVE_MAX_URL_LENGTH		hpb_c::hive_max_url_length.get()
+#define HIVE_IRREVERSIBLE_THRESHOLD		hpb_c::hive_irreversible_threshold
+#define HIVE_VIRTUAL_SCHEDULE_LAP_LENGTH		hpb_c::hive_virtual_schedule_lap_length.get()
+#define HIVE_VIRTUAL_SCHEDULE_LAP_LENGTH2		hpb_c::hive_virtual_schedule_lap_length2.get()
+#define HIVE_INITIAL_VOTE_POWER_RATE		hpb_c::hive_initial_vote_power_rate.get()
+#define HIVE_REDUCED_VOTE_POWER_RATE		hpb_c::hive_reduced_vote_power_rate.get()
+#define HIVE_MAX_LIMIT_ORDER_EXPIRATION		hpb_c::hive_max_limit_order_expiration.get()
+#define HIVE_DELEGATION_RETURN_PERIOD_HF0		hpb_c::hive_delegation_return_period_hf0.get()
+#define HIVE_DELEGATION_RETURN_PERIOD_HF20		hpb_c::hive_delegation_return_period_hf20.get()
+#define HIVE_RD_MIN_DECAY_BITS		hpb_c::hive_rd_min_decay_bits
+#define HIVE_RD_MAX_DECAY_BITS		hpb_c::hive_rd_max_decay_bits.get()
+#define HIVE_RD_DECAY_DENOM_SHIFT		hpb_c::hive_rd_decay_denom_shift
+#define HIVE_RD_MAX_POOL_BITS		hpb_c::hive_rd_max_pool_bits
+#define HIVE_RD_MAX_BUDGET_1		hpb_c::hive_rd_max_budget_1
+#define HIVE_RD_MAX_BUDGET_2		hpb_c::hive_rd_max_budget_2
+#define HIVE_RD_MAX_BUDGET_3		hpb_c::hive_rd_max_budget_3
+#define HIVE_RD_MAX_BUDGET		hpb_c::hive_rd_max_budget
+#define HIVE_RD_MIN_DECAY		hpb_c::hive_rd_min_decay.get()
+#define HIVE_RD_MIN_BUDGET		hpb_c::hive_rd_min_budget.get()
+#define HIVE_RD_MAX_DECAY		hpb_c::hive_rd_max_decay.get()
+#define HIVE_ACCOUNT_SUBSIDY_PRECISION		hpb_c::hive_account_subsidy_precision.get()
+#define HIVE_WITNESS_SUBSIDY_BUDGET_PERCENT		hpb_c::hive_witness_subsidy_budget_percent.get()
+#define HIVE_WITNESS_SUBSIDY_DECAY_PERCENT		hpb_c::hive_witness_subsidy_decay_percent.get()
+#define HIVE_DEFAULT_ACCOUNT_SUBSIDY_DECAY		hpb_c::hive_default_account_subsidy_decay.get()
+#define HIVE_DEFAULT_ACCOUNT_SUBSIDY_BUDGET		hpb_c::hive_default_account_subsidy_budget.get()
+#define HIVE_DECAY_BACKSTOP_PERCENT		hpb_c::hive_decay_backstop_percent.get()
+#define HIVE_BLOCK_GENERATION_POSTPONED_TX_LIMIT		hpb_c::hive_block_generation_postponed_tx_limit.get()
+#define HIVE_PENDING_TRANSACTION_EXECUTION_LIMIT		hpb_c::hive_pending_transaction_execution_limit.get()
+#define HIVE_CUSTOM_OP_ID_MAX_LENGTH		hpb_c::hive_custom_op_id_max_length.get()
+#define HIVE_CUSTOM_OP_DATA_MAX_LENGTH		hpb_c::hive_custom_op_data_max_length.get()
+#define HIVE_BENEFICIARY_LIMIT		hpb_c::hive_beneficiary_limit.get()
+#define HIVE_COMMENT_TITLE_LIMIT		hpb_c::hive_comment_title_limit.get()
+#define HIVE_ONE_DAY_SECONDS		hpb_c::hive_one_day_seconds.get()
+#define HIVE_MINER_ACCOUNT		hpb_c::hive_miner_account.get()
+#define HIVE_NULL_ACCOUNT		hpb_c::hive_null_account.get()
+#define HIVE_TEMP_ACCOUNT		hpb_c::hive_temp_account.get()
+#define HIVE_PROXY_TO_SELF_ACCOUNT		hpb_c::hive_proxy_to_self_account.get()
+#define HIVE_ROOT_POST_PARENT		hpb_c::hive_root_post_parent.get()
+#define OBSOLETE_TREASURY_ACCOUNT		hpb_c::obsolete_treasury_account.get()
+#define NEW_HIVE_TREASURY_ACCOUNT		hpb_c::new_hive_treasury_account.get()
+#define HIVE_TREASURY_FEE		hpb_c::hive_treasury_fee.get()
+#define HIVE_PROPOSAL_SUBJECT_MAX_LENGTH		hpb_c::hive_proposal_subject_max_length.get()
+#define HIVE_PROPOSAL_MAX_IDS_NUMBER		hpb_c::hive_proposal_max_ids_number.get()
+#define HIVE_PROPOSAL_FEE_INCREASE_DAYS		hpb_c::hive_proposal_fee_increase_days.get()
+#define HIVE_PROPOSAL_FEE_INCREASE_DAYS_SEC		hpb_c::hive_proposal_fee_increase_days_sec.get()
+#define HIVE_PROPOSAL_FEE_INCREASE_AMOUNT		hpb_c::hive_proposal_fee_increase_amount.get()
+#define HIVE_PROPOSAL_CONVERSION_RATE		hpb_c::hive_proposal_conversion_rate.get()
+
 #ifdef	HIVE_ENABLE_SMT
-  #define SMT_MAX_VOTABLE_ASSETS		hpb_c::smt_max_votable_assets.get()
-  #define SMT_VESTING_WITHDRAW_INTERVAL_SECONDS		hpb_c::smt_vesting_withdraw_interval_seconds.get()
-  #define SMT_UPVOTE_LOCKOUT		hpb_c::smt_upvote_lockout.get()
-  #define SMT_EMISSION_MIN_INTERVAL_SECONDS		hpb_c::smt_emission_min_interval_seconds.get()
-  #define SMT_EMIT_INDEFINITELY		hpb_c::smt_emit_indefinitely.get()
-  #define SMT_MAX_NOMINAL_VOTES_PER_DAY		hpb_c::smt_max_nominal_votes_per_day.get()
-  #define SMT_MAX_VOTES_PER_REGENERATION		hpb_c::smt_max_votes_per_regeneration.get()
-  #define SMT_DEFAULT_VOTES_PER_REGEN_PERIOD		hpb_c::smt_default_votes_per_regen_period.get()
-  #define SMT_DEFAULT_PERCENT_CURATION_REWARDS		hpb_c::smt_default_percent_curation_rewards.get()
+
+#define SMT_MAX_VOTABLE_ASSETS		hpb_c::smt_max_votable_assets.get()
+#define SMT_VESTING_WITHDRAW_INTERVAL_SECONDS		hpb_c::smt_vesting_withdraw_interval_seconds.get()
+#define SMT_UPVOTE_LOCKOUT		hpb_c::smt_upvote_lockout.get()
+#define SMT_EMISSION_MIN_INTERVAL_SECONDS		hpb_c::smt_emission_min_interval_seconds.get()
+#define SMT_EMIT_INDEFINITELY		hpb_c::smt_emit_indefinitely.get()
+#define SMT_MAX_NOMINAL_VOTES_PER_DAY		hpb_c::smt_max_nominal_votes_per_day.get()
+#define SMT_MAX_VOTES_PER_REGENERATION		hpb_c::smt_max_votes_per_regeneration.get()
+#define SMT_DEFAULT_VOTES_PER_REGEN_PERIOD		hpb_c::smt_default_votes_per_regen_period.get()
+#define SMT_DEFAULT_PERCENT_CURATION_REWARDS		hpb_c::smt_default_percent_curation_rewards.get()
+
 #endif

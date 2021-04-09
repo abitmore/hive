@@ -11,16 +11,13 @@
 #include <hive/protocol/asset_symbol.hpp>
 #include <hive/protocol/hardfork.hpp>
 #include <hive/protocol/fixed_string.hpp>
-// #include <hive/protocol/types.hpp>
-
-// #include <hive/protocol/version.hpp>
 
 namespace hive
 {
   namespace protocol
   {
     struct asset;
-    typedef fixed_string<16> account_name_type;
+    typedef fixed_string<16> account_name_type; // this is pretty bad
 
     namespace blockchain_configuration
     {
